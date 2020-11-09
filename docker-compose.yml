@@ -1,0 +1,9 @@
+version: '3'
+services:
+  bot:
+    build:
+      context: ./bot
+      args:
+        - DISCORD_TOKEN=${DISCORD_TOKEN}
+        - OWNER_ID=${OWNER_ID}
+    restart: unless-stopped
