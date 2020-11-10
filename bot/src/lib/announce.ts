@@ -4,9 +4,7 @@ import { StreamDispatcher, VoiceConnection } from 'discord.js'
 import synth from './synth'
 
 export const say = async (voiceConnection: VoiceConnection, text: string) => {
-  console.log(text)
   let path: string = ''
-
   try {
     path = await synth(text)
     await play(voiceConnection, path)

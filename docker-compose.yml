@@ -6,4 +6,7 @@ services:
       args:
         - DISCORD_TOKEN=${DISCORD_TOKEN}
         - OWNER_ID=${OWNER_ID}
+        - AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}
+        - AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}
+        - AWS_DEFAULT_REGION=${AWS_DEFAULT_REGION}
     restart: unless-stopped

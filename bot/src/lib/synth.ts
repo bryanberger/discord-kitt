@@ -23,7 +23,7 @@ export default (text: string): Promise<string> => {
   return new Promise((resolve, reject) => {
     Polly.synthesizeSpeech(params, (err, data) => {
       if (err) {
-        console.log(err)
+        console.error(err)
         reject()
       } else if (data) {
         if (data.AudioStream instanceof Buffer) {
