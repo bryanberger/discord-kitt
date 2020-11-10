@@ -39,7 +39,7 @@ export class SayCommand extends Command {
     }
 
     try {
-      const voiceConnection = message.client.voice.connections.get(message.member.guild.id)
+      const voiceConnection = this.client.voice.connections.get(message.member.guild.id)
       if(!voiceConnection) {
         return message.say(`You must be in the same voice channel as the bot.`)
       }

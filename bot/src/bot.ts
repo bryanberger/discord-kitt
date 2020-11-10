@@ -1,3 +1,11 @@
+/**
+ * 
+ * TODO:
+ * 
+ * - Add persistance using sqllite, maybe need something like redis (in another container, for phrase lists)
+ * - Add rejoin channels on reboot
+ * - Remove !say message 
+ */
 import path from 'path'
 import { CommandoClient } from 'discord.js-commando'
 

@@ -12,7 +12,7 @@ export class JoinCommand extends Command {
         usages: 1,
         duration: 5,
       },
-      guildOnly: true
+      guildOnly: true,
     })
   }
 
@@ -23,6 +23,8 @@ export class JoinCommand extends Command {
       return message.say('You need to be in a voice channel to summon me.')
     }
 
-    await message.member.voice.channel.join()
+    await message.member.voice.channel
+      .join()
+      .catch(() => message.say('I need permission to join your voice channel.'))
   }
 }
