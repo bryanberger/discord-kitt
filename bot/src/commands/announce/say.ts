@@ -1,6 +1,5 @@
 import { Message } from 'discord.js'
 import { Command, CommandoClient, CommandoMessage } from 'discord.js-commando'
-import { client } from '../../client'
 import { say } from '../../lib/announce'
 
 const MAX_CHARS = 140
@@ -40,7 +39,7 @@ export class SayCommand extends Command {
     }
 
     try {
-      const voiceConnection = client.voice.connections.get(message.member.guild.id)
+      const voiceConnection = message.client.voice.connections.get(message.member.guild.id)
       if(!voiceConnection) {
         return message.say(`You must be in the same voice channel as the bot.`)
       }

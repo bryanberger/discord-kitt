@@ -1,11 +1,14 @@
 import path from 'path'
+import { CommandoClient } from 'discord.js-commando'
 
-import { client } from './client'
-import { ensureDirectories } from './lib/directories'
 import voiceStateUpdate from './handlers/voiceStateUpdate'
 
-// Ensure Directories
-ensureDirectories()
+// Client
+const client = new CommandoClient({
+  commandPrefix: '!',
+  owner: process.env.OWNER_ID,
+  disableMentions: 'everyone',
+})
 
 client.registry
   // Registers your custom command groups
@@ -17,7 +20,6 @@ client.registry
   // Registers all built-in groups, commands, and argument types
   .registerDefaults()
   // Register custom commands
-  .registerCommandsIn(path.join(__dirname, 'commands'))
   .registerCommandsIn(path.join(__dirname, 'commands/announce'))
   .registerCommandsIn(path.join(__dirname, 'commands/fun'))
   .registerCommandsIn(path.join(__dirname, 'commands/owner'))
@@ -36,6 +38,8 @@ client
       `Client ready; logged in as ${client.user.username}#${client.user.discriminator} (${client.user.id})`,
     )
   })
-  .on('voiceStateUpdate', voiceStateUpdate)
+  .on('voiceStateUpdate', (oldState, newState) =>
+    voiceStateUpdate(oldState, newState, client),
+  )
 
 client.login(process.env.DISCORD_TOKEN)

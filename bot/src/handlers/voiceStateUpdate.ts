@@ -1,9 +1,9 @@
 import { VoiceConnection, VoiceState } from 'discord.js'
+import { CommandoClient } from 'discord.js-commando'
 
-import { client } from '../client'
 import { say } from '../lib/announce'
 
-export default async (oldState: VoiceState, newState: VoiceState) => {
+export default async (oldState: VoiceState, newState: VoiceState, client: CommandoClient) => {
   // ignore bots
   if (oldState.member.user.bot) return
 

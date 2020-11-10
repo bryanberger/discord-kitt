@@ -2,12 +2,16 @@ require('dotenv').config({ path: '../.env' })
 
 import path from 'path'
 import { ShardingManager } from 'discord.js'
+import { ensureDirectories } from './lib/directories'
+
+// Ensure Directories
+ensureDirectories()
 
 /* eslint-disable no-console */
 
 const manager = new ShardingManager(path.join(__dirname, 'bot.js'), {
   token: process.env.DISCORD_TOKEN,
-  totalShards: 2,
+  totalShards: 'auto',
   mode: 'worker',
 })
 
