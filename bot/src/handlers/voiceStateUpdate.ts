@@ -5,7 +5,7 @@ import { say } from '../lib/announce'
 
 export default async (oldState: VoiceState, newState: VoiceState, client: CommandoClient) => {
   // ignore bots
-  if (oldState.member.user.bot) return
+  // if (oldState.member.user.bot) return
 
   // ignore self
   if (newState.member.id === client.user.id) return
