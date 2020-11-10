@@ -1,6 +1,7 @@
 FROM node:14.15.0
 
-# RUN apt-get update
+RUN apt-get update
+RUN apt install ffmpeg
 
 # Arguments
 ARG DISCORD_TOKEN

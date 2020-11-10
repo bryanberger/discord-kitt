@@ -4,11 +4,11 @@ import { Command, CommandoClient, CommandoMessage } from 'discord.js-commando'
 export class FlipCommand extends Command {
   private sides = ['heads', 'tails']
 
-  private constructor(client: CommandoClient) {
+  public constructor(client: CommandoClient) {
     super(client, {
       name: 'flip',
-      group: 'fun',
       memberName: 'flip',
+      group: 'fun',
       description: 'Flip a coin. Heads or tails.',
       throttling: {
         usages: 1,

@@ -1,32 +1,28 @@
-import { join } from 'path'
-import { CommandoClient } from 'discord.js-commando'
+require('dotenv').config()
+require('dotenv').config({ path: '../.env' })
 
-console.log('index.ts')
+import path from 'path'
+import { ShardingManager } from 'discord.js'
 
-const client = new CommandoClient({
-  commandPrefix: '!',
-  owner: process.env.OWNER_ID,
+/* eslint-disable no-console */
+
+const manager = new ShardingManager(path.join(__dirname, 'bot.js'), {
+  token: process.env.DISCORD_TOKEN,
+  totalShards: 2,
+  mode: 'worker',
 })
 
-client.registry
-  // Registers your custom command groups
-  .registerGroups([
-    ['announce', 'Announcement commands'],
-    ['fun', 'Fun commands'],
-  ])
-  // Registers all built-in groups, commands, and argument types
-  .registerDefaults()
-  // Registers all of your commands in the ./commands/ directory
-  .registerCommandsIn(join(__dirname, 'commands'))
-
-client
-  .on('error', console.error)
-  .on('warn', console.warn)
-  .on('debug', console.log)
-  .on('ready', () => {
-    console.log(
-      `Client ready; logged in as ${client.user.username}#${client.user.discriminator} (${client.user.id})`,
+manager.on('shardCreate', (shard) => {
+  console.log(`----- SHARD ${shard.id} LAUNCHED -----`)
+  shard
+    .on('death', () => console.log(`----- SHARD ${shard.id} DIED -----`))
+    .on('ready', () => console.log(`----- SHARD ${shard.id} READY -----`))
+    .on('disconnect', () =>
+      console.log(`----- SHARD ${shard.id} DISCONNECTED -----`),
     )
-  })
+    .on('reconnecting', () =>
+      console.log(`----- SHARD ${shard.id} RECONNECTING -----`),
+    )
+})
 
-client.login(process.env.DISCORD_TOKEN)
+manager.spawn().catch(console.error)
