@@ -2,14 +2,15 @@ import { Message } from 'discord.js'
 import { Command, CommandoClient, CommandoMessage } from 'discord.js-commando'
 
 import { Silence } from '../../lib/silence'
+import { sleep } from '../../lib/utils'
 
 export class JoinCommand extends Command {
   public constructor(client: CommandoClient) {
     super(client, {
-      name: 'join',
+      name: 'rejoin',
       group: 'announce',
-      memberName: 'join',
-      description: "Joins the user's current voice channel",
+      memberName: 'rejoin',
+      description: "Rejoin the user's current voice channel",
       throttling: {
         usages: 1,
         duration: 5,
@@ -21,11 +22,14 @@ export class JoinCommand extends Command {
   public async run(
     message: CommandoMessage,
   ): Promise<Message | Message[] | null> {
-    if (!message.member.voice.channel) {
-      return message.say('You need to be in a voice channel to summon me.')
+    const channel = message.member.voice.channel
+    if (!channel) {
+      return message.say('You need to be in a voice channel.')
     }
     try {
-      const connection = await message.member.voice.channel.join()
+      channel.leave()
+      await sleep(1000)
+      const connection = await channel.join()
       connection.play(new Silence(), { type: 'opus' })
       connection.setSpeaking(0)
     } catch (err) {

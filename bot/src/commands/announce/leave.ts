@@ -7,7 +7,7 @@ export class LeaveCommand extends Command {
       name: 'leave',
       group: 'announce',
       memberName: 'leave',
-      description: 'Leaves the users current voice channel',
+      description: "Leaves the user's current voice channel",
       throttling: {
         usages: 1,
         duration: 5,
