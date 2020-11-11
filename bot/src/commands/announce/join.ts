@@ -23,8 +23,11 @@ export class JoinCommand extends Command {
       return message.say('You need to be in a voice channel to summon me.')
     }
 
-    await message.member.voice.channel
-      .join()
-      .catch(() => message.say('I need permission to join your voice channel.'))
+    try {
+      const connection = await message.member.voice.channel.join()
+      connection.setSpeaking(0)
+    } catch (err) {
+      return message.say('I need permission to join your voice channel.')
+    }
   }
 }
