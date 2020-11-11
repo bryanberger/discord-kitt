@@ -8,6 +8,21 @@ export default async (
   newState: VoiceState,
   client: CommandoClient,
 ) => {
+  // Ignore Bots
+  if (oldState.member.user.bot || newState.member.user.bot) {
+    return
+  }
+
+  // Ignore Streaming State
+  if (
+    (!oldState.streaming && newState.streaming) ||
+    (oldState.streaming && !newState.streaming) ||
+    (!oldState.selfVideo && newState.selfVideo) ||
+    (oldState.selfVideo && !newState.selfVideo)
+  ) {
+    return
+  }
+
   const oldMember = oldState.member
   const channel = newState.channel ?? oldState.channel
   const connections = client.voice.connections
@@ -18,24 +33,33 @@ export default async (
     (connection) => connection.channel === channel,
   )
 
-  // Ignore Bots
-  if (oldState.member.user.bot || newState.member.user.bot) {
-    return
-  }
-
   if (isBotInVoiceChannel) {
-    if (oldState.deaf === false && newState.deaf === true) {
-      say(connection, `${username} has deafened`)
-    } else if (oldState.deaf === true && newState.deaf === false) {
-      say(connection, `${username} has undeafened`)
-    } else if (oldState.mute === false && newState.mute === true) {
-      say(connection, `${username} has muted`)
-    } else if (oldState.mute === true && newState.mute === false) {
-      say(connection, `${username} has unmuted`)
+    let message = null
+
+    if (!oldState.serverMute && newState.serverMute) {
+      message = 'has been server muted'
+    } else if (oldState.serverMute && !newState.serverMute) {
+      message = 'has been server unmuted'
+    } else if (!oldState.serverDeaf && newState.serverDeaf) {
+      message = 'has been server deafened'
+    } else if (oldState.serverDeaf && !newState.serverDeaf) {
+      message = 'has been server undeafened'
+    } else if (!oldState.deaf && newState.deaf === true) {
+      message = 'has deafened'
+    } else if (oldState.deaf && !newState.deaf) {
+      message = 'has undeafened'
+    } else if (!oldState.mute && newState.mute) {
+      message = 'has muted'
+    } else if (oldState.mute && !newState.mute) {
+      message = 'has unmuted'
     } else if (newState.channel) {
-      say(connection, `${username} has joined the channel`)
+      message = 'has joined the channel'
     } else if (oldState.channel) {
-      say(connection, `${username} has left the channel`)
+      message = 'has left the channel'
+    }
+
+    if (message) {
+      say(connection, `${username} ${message}`)
     }
   }
 }

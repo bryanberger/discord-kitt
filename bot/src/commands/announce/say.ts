@@ -37,13 +37,15 @@ export class SayCommand extends Command {
     if (!channel) {
       return message.say(`You must join the bot's voice channel.`)
     }
-
     try {
       const voiceConnection = this.client.voice.connections.get(message.member.guild.id)
       if(!voiceConnection) {
         return message.say(`You must be in the same voice channel as the bot.`)
       }
-      
+      // remove the message from the text-channel
+      message.delete()
+
+      // announce
       await say(voiceConnection, args.phrase.trim())
      
     } catch (err) {
