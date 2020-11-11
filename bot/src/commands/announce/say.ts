@@ -15,7 +15,7 @@ export class SayCommand extends Command {
         usages: 1,
         duration: 5,
       },
-      clientPermissions: ['CONNECT', 'VIEW_CHANNEL', 'SPEAK'],
+      clientPermissions: ['CONNECT', 'SPEAK'],
       guildOnly: true,
       args: [
         {

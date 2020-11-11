@@ -16,6 +16,7 @@ export class JoinCommand extends Command {
         duration: 5,
       },
       guildOnly: true,
+      clientPermissions: ['CONNECT', 'SPEAK'],
     })
   }
 

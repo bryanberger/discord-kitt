@@ -19,8 +19,11 @@ Run via Docker, or locally via npm
 ### Docker
 
 ```
-/bin/start
-/bin/deploy
+chmox +x bin/start.sh
+chmox +x bin/deploy.sh
+
+./bin/start.sh
+./bin/deploy.sh
 ```
 
 ### Locally

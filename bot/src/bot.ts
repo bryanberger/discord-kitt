@@ -1,8 +1,8 @@
 /**
- * 
+ *
  * TODO:
- * 
- * - Add persistance using sqllite, maybe need something like redis (in another container, for phrase lists)
+ *
+ * - Add persistance using sqllite, maybe need something more robust (in another container, for phrase lists for every member, based on role?)
  * - Add rejoin channels on reboot
  * - Use Winston for logging
  */
@@ -10,6 +10,9 @@ import path from 'path'
 import { CommandoClient } from 'discord.js-commando'
 
 import voiceStateUpdate from './handlers/voiceStateUpdate'
+import guildCreate from './handlers/guildCreate'
+import guildDelete from './handlers/guildDelete'
+import { setActivity, sleep } from './lib/utils'
 
 // Client
 const client = new CommandoClient({
@@ -42,12 +45,24 @@ client
   .on('warn', console.warn)
   .on('debug', console.log)
   .on('ready', () => {
+    setActivity(client)
     console.log(
       `Client ready; logged in as ${client.user.username}#${client.user.discriminator} (${client.user.id})`,
     )
+
+    // Hack for now, reconnect to all open voice connections every 10 minutes
+    // setInterval(() => {
+    //   client.voice.connections.map(async (conn) => {
+    //     // conn.channel.leave()
+    //     // await sleep(1000)
+    //     conn.channel.join()
+    //   })
+    // }, 10 * 60 * 1000)
   })
   .on('voiceStateUpdate', (oldState, newState) =>
     voiceStateUpdate(oldState, newState, client),
   )
+  .on('guildCreate', (guild) => guildCreate(guild, client))
+  .on('guildDelete', (guild) => guildDelete(guild, client))
 
 client.login(process.env.DISCORD_TOKEN)
