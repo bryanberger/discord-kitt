@@ -24,17 +24,17 @@ export default async (
   }
 
   const oldMember = oldState.member
-  const channel = newState.channel ?? oldState.channel
+  // const channel = newState.channel ?? oldState.channel
   const connections = client.voice.connections
   const connection = connections.get(oldState.guild.id)
   const username = oldMember.nickname || oldMember.user.username
 
-  const isBotInVoiceChannel = connections.some(
-    (connection) => connection.channel === channel,
-  )
+  // const isBotInVoiceChannel = connections.some(
+  //   (connection) => connection.channel === channel,
+  // )
 
-  if (isBotInVoiceChannel) {
-    let message = null
+  // if (isBotInVoiceChannel) {
+    let message: string = null
 
     if (!oldState.serverMute && newState.serverMute) {
       message = 'has been server muted'
@@ -52,14 +52,17 @@ export default async (
       message = 'has muted'
     } else if (oldState.mute && !newState.mute) {
       message = 'has unmuted'
-    } else if (newState.channel) {
+    } else if (
+      newState.channel &&
+      oldState.channel?.id !== newState.channel.id
+    ) {
       message = 'has joined the channel'
-    } else if (oldState.channel) {
+    } else if (oldState.channel && !newState.channel) {
       message = 'has left the channel'
     }
 
-    if (message) {
+    if (message !== null) {
       say(connection, `${username} ${message}`)
     }
-  }
+  // }
 }
