@@ -1,4 +1,9 @@
-FROM node:14.15.0
+FROM node:14.15.0-slim
+
+RUN apt-get update && apt-get install \
+    python make git curl build-base g++ \
+    -yq --no-install-suggests --no-install-recommends --allow-downgrades --allow-remove-essential --allow-change-held-packages \
+  && apt-get clean
 
 # Env
 ENV NODE_ENV=production

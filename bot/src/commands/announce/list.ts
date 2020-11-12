@@ -51,7 +51,7 @@ export class ListCommand extends Command {
       if (message.channel.type !== 'dm')
         messages.push(
           await message.reply(
-            'Sent you a DM with the phrase list for this guild.',
+            'Sent you a DM with the phrase list for this server.',
           ),
         )
     } catch (err) {
