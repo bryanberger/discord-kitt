@@ -7,7 +7,8 @@
  * - Use Winston for logging
  */
 import path from 'path'
-import { CommandoClient } from 'discord.js-commando'
+import { CommandoClient, SyncSQLiteProvider } from 'discord.js-commando'
+import sqlite3 from 'better-sqlite3'
 
 import voiceStateUpdate from './handlers/voiceStateUpdate'
 import guildCreate from './handlers/guildCreate'
@@ -20,6 +21,11 @@ const client = new CommandoClient({
   owner: process.env.OWNER_ID,
   disableMentions: 'everyone',
 })
+
+// SQLite for commando guild settings syncing
+client.setProvider(
+  new SyncSQLiteProvider(new sqlite3(path.join(__dirname, 'settings.db'))),
+)
 
 client.registry
   // Registers your custom command groups

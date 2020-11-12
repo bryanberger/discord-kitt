@@ -2,6 +2,7 @@ import { Message } from 'discord.js'
 import { Command, CommandoClient, CommandoMessage } from 'discord.js-commando'
 import { say } from '../../lib/announce'
 
+const MIN_CHARS = 2
 const MAX_CHARS = 140
 
 export class SayCommand extends Command {
@@ -21,9 +22,10 @@ export class SayCommand extends Command {
         {
           key: 'phrase',
           prompt: 'What would you like the bot to say?',
-          error: `The maximum length is ${MAX_CHARS} chars.`,
+          error: `The min length is ${MIN_CHARS} characters, the max length is ${MAX_CHARS} characters.`,
           type: 'string',
-          validate: (val: string) => val.length <= MAX_CHARS,
+          min: MIN_CHARS,
+          max: MAX_CHARS
         },
       ],
     })

@@ -1,12 +1,25 @@
 version: '3'
 services:
+  redis:
+    image: redis:latest
+    container_name: cache
+    command: bash -c "redis-server --appendonly yes"
+    expose:
+      - 6379
+    ports:
+      - "6379:6379"
+    volumes:
+      - ./cache:/data
+
   bot:
     build:
       context: ./bot
-      args:
-        - DISCORD_TOKEN=${DISCORD_TOKEN}
-        - OWNER_ID=${OWNER_ID}
-        - AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}
-        - AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}
-        - AWS_DEFAULT_REGION=${AWS_DEFAULT_REGION}
-    restart: unless-stopped
+    depends_on:
+      - redis
+    environment:
+      DISCORD_TOKEN: ${DISCORD_TOKEN}
+      OWNER_ID: ${OWNER_ID}
+      AWS_ACCESS_KEY_ID: ${AWS_ACCESS_KEY_ID}
+      AWS_SECRET_ACCESS_KEY: ${AWS_SECRET_ACCESS_KEY}
+      AWS_DEFAULT_REGION: ${AWS_DEFAULT_REGION}
+      REDIS_URL: ${REDIS_URL}
