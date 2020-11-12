@@ -7,7 +7,3 @@ export const sleep = (ms: number) => {
 export const setActivity = (client: CommandoClient) => {
   client.user.setActivity(`in ${client.guilds.cache.size} servers`)
 }
-
-export const phraseId = (guildId: string, memberId: string) => {
-  return `${guildId}:${memberId}`
-}
