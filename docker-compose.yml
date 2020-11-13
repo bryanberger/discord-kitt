@@ -17,7 +17,7 @@ services:
     depends_on:
       - redis
     volumes:
-      - ./settings:/dist/settings
+      - ./settings:/usr/src/app/dist/settings
     environment:
       DISCORD_TOKEN: ${DISCORD_TOKEN}
       OWNER_ID: ${OWNER_ID}
