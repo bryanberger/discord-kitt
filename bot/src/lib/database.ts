@@ -7,10 +7,12 @@ const redisUrl =
 
 const join = new Keyv(redisUrl, { namespace: 'join' })
 const leave = new Keyv(redisUrl, { namespace: 'leave' })
+export const channels = new Keyv(redisUrl, { namespace: 'channels' })
 
 // Handle DB connection errors
-join.on('error', (err) => console.log('DB Connection Error', err))
-leave.on('error', (err) => console.log('DB Connection Error', err))
+join.on('error', (err) => console.log('DB Connection Error (join)', err))
+leave.on('error', (err) => console.log('DB Connection Error (leave)', err))
+channels.on('error', (err) => console.log('DB Connection Error (channels)', err))
 
 // Helpers for setting the guild object
 export type PhraseType = 'join' | 'leave'
@@ -29,7 +31,12 @@ export interface PhraseSet extends PhraseGet {
   message: string
 }
 
-export const setPhrase = async (obj: PhraseSet) => {
+export interface ChannelSet {
+  guildId: string
+  channelId: string
+}
+
+export const setPhraseForMember = async (obj: PhraseSet) => {
   const { guildId, memberId, type, message } = obj
   const namespace = type === 'join' ? join : leave
 

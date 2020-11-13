@@ -1,7 +1,7 @@
 FROM node:14.15.0-slim
 
 RUN apt-get update && apt-get install \
-    python make git curl build-base g++ \
+    python make git curl g++ \
     -yq --no-install-suggests --no-install-recommends --allow-downgrades --allow-remove-essential --allow-change-held-packages \
   && apt-get clean
 

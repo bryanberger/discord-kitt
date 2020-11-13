@@ -26,9 +26,7 @@ export class JoinCommand extends Command {
       return message.say('You need to be in a voice channel to summon me.')
     }
     try {
-      const connection = await message.member.voice.channel.join()
-      connection.play(new Silence(), { type: 'opus' })
-      connection.setSpeaking(0)
+      await message.member.voice.channel.join()
     } catch (err) {
       return message.say('I need permission to join your voice channel.')
     }

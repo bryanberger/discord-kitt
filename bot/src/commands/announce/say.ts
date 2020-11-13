@@ -45,7 +45,7 @@ export class SayCommand extends Command {
         return message.say(`You must be in the same voice channel as the bot.`)
       }
       // remove the message from the text-channel
-      message.delete()
+      message.delete().catch()
 
       // announce
       await say(voiceConnection, args.phrase.trim())

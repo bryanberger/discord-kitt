@@ -1,10 +1,10 @@
 import { GuildMember, Message } from 'discord.js'
 import { Command, CommandoClient, CommandoMessage } from 'discord.js-commando'
-import { setPhrase } from '../../lib/database'
+import { setPhraseForMember } from '../../lib/database'
 
 const MIN_CHARS = 10
 const MAX_CHARS = 140
-const WAIT = 8
+const WAIT = 5
 
 export interface PhraseCommandArgs {
   type: 'join' | 'leave'
@@ -82,7 +82,7 @@ export class PhraseCommand extends Command {
     const member = args.member === '' ? null : args.member ?? message.member
 
     if (args.type === 'join') {
-      await setPhrase({
+      await setPhraseForMember({
         type: 'join',
         guildId: message.guild.id,
         memberId: member.id,
@@ -90,7 +90,7 @@ export class PhraseCommand extends Command {
       })
       return message.reply(`join phrase for ${member.displayName} was edited.`)
     } else if (args.type === 'leave') {
-      await setPhrase({
+      await setPhraseForMember({
         type: 'leave',
         guildId: message.guild.id,
         memberId: member.id,
