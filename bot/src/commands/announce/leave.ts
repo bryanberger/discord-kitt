@@ -20,13 +20,14 @@ export class LeaveCommand extends Command {
   public async run(
     message: CommandoMessage,
   ): Promise<Message | Message[] | null> {
+    const channel = message.member.voice.channel
     if (
-      message.member.voice.channel &&
+      channel &&
       message.client.voice.connections.some(
-        (connection) => connection.channel === message.member.voice.channel,
+        (connection) => connection.channel === channel,
       )
     ) {
-      message.member.voice.channel.leave()
+      channel.leave()
     } else {
       return message.say("I'm not in your voice channel.")
     }

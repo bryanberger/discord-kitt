@@ -15,7 +15,10 @@ export class RestartCommand extends Command {
 
   public async run(message: CommandoMessage): Promise<Message | Message[]> {
     await message.say('Restarting...')
-    message.client.destroy()
+    try {
+      message.client.destroy()
+    } catch (err) {}
+    
     process.exit(0)
   }
 }

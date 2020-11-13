@@ -5,13 +5,15 @@ import synth from './synth'
 
 export const say = async (voiceConnection: VoiceConnection, text: string) => {
   let path: string = ''
-  try {
-    path = await synth(text)
-    await play(voiceConnection, path)
-    fs.unlinkSync(path)
-  } catch (err) {
-    if (path !== '') fs.unlinkSync(path)
-    console.error(err)
+  if (voiceConnection) {
+    try {
+      path = await synth(text)
+      await play(voiceConnection, path)
+      fs.unlinkSync(path)
+    } catch (err) {
+      if (path !== '') fs.unlinkSync(path)
+      console.error(err)
+    }
   }
 }
 

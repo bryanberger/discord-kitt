@@ -1,14 +1,44 @@
-import { VoiceState } from 'discord.js'
+import {
+  Collection,
+  VoiceChannel,
+  VoiceConnection,
+  VoiceState,
+} from 'discord.js'
 import { CommandoClient } from 'discord.js-commando'
 
 import { say } from '../lib/announce'
+import { channels, getPhraseForMember } from '../lib/database'
+import { Silence } from '../lib/silence'
 
 export default async (
   oldState: VoiceState,
   newState: VoiceState,
   client: CommandoClient,
 ) => {
-  // Ignore Bots
+  const connections = client.voice.connections
+  const connection = connections.get(oldState.guild.id)
+  const username = oldState.member.nickname || oldState.member.user.username
+  let message: string = null
+
+  // Self
+  if(oldState.member.id || newState.member.id === client.user.id) {
+    if(!oldState.channel && newState.channel) {
+      // join
+      connection.play(new Silence(), { type: 'opus' })
+      connection.setSpeaking(0)
+      await channels.set(newState.channel.id, true)
+    } else if(!newState.channel) {
+      // leave
+      await channels.delete(oldState.channel.id)
+    } else if(oldState.channelID !== newState.channelID) {
+      // move
+      await channels.delete(oldState.channel.id)
+      await channels.set(newState.channel.id, true)
+    }
+    return
+  }
+
+  // Ignore other Bots
   if (oldState.member.user.bot || newState.member.user.bot) {
     return
   }
@@ -23,19 +53,8 @@ export default async (
     return
   }
 
-  const oldMember = oldState.member
-  // const channel = newState.channel ?? oldState.channel
-  const connections = client.voice.connections
-  const connection = connections.get(oldState.guild.id)
-  const username = oldMember.nickname || oldMember.user.username
-
-  // const isBotInVoiceChannel = connections.some(
-  //   (connection) => connection.channel === channel,
-  // )
-
-  // if (isBotInVoiceChannel) {
-    let message: string = null
-
+  // Events to be spoken in the bot's channe
+  if (oldState.channelID === newState.channelID) {
     if (!oldState.serverMute && newState.serverMute) {
       message = 'has been server muted'
     } else if (oldState.serverMute && !newState.serverMute) {
@@ -52,17 +71,45 @@ export default async (
       message = 'has muted'
     } else if (oldState.mute && !newState.mute) {
       message = 'has unmuted'
-    } else if (
-      newState.channel &&
-      oldState.channel?.id !== newState.channel.id
-    ) {
-      message = 'has joined the channel'
-    } else if (oldState.channel && !newState.channel) {
-      message = 'has left the channel'
     }
 
     if (message !== null) {
-      say(connection, `${username} ${message}`)
+      return await say(connection, `${username} ${message}`)
     }
-  // }
+  }
+
+  /**
+   * Channels changed between states
+   * Check see if we should play a `join` or `leave` message
+   * Check if the user has a custom message in the DB, if not play default
+   */
+  if (newState.channel && isBotInChannel(connections, newState.channel)) {
+    const customMessage = await getPhraseForMember({
+      guildId: newState.guild.id,
+      memberId: newState.member.id,
+      type: 'join',
+    })
+    message = customMessage ?? 'has joined the channel'
+  } else if (
+    oldState.channel &&
+    isBotInChannel(connections, oldState.channel)
+  ) {
+    const customMessage = await getPhraseForMember({
+      guildId: oldState.guild.id,
+      memberId: oldState.member.id,
+      type: 'leave',
+    })
+    message = customMessage ?? 'has left the channel'
+  }
+
+  if (message !== null) {
+    return await say(connection, `${username} ${message}`)
+  }
+}
+
+const isBotInChannel = (
+  connections: Collection<string, VoiceConnection>,
+  channel: VoiceChannel,
+) => {
+  return connections.some((connection) => connection.channel.id === channel.id)
 }
