@@ -6,9 +6,10 @@ import {
 } from 'discord.js'
 import { CommandoClient } from 'discord.js-commando'
 
-import { say } from '../lib/announce'
+import { say, play } from '../lib/announce'
 import { channels, getPhraseForMember } from '../lib/database'
 import { Silence } from '../lib/silence'
+import { sleep } from '../lib/utils'
 
 export default async (
   oldState: VoiceState,
@@ -21,17 +22,21 @@ export default async (
   let message: string = null
 
   // Self
-  if(oldState.member.id || newState.member.id === client.user.id) {
-    if(!oldState.channel && newState.channel) {
-      // join
-      connection.play(new Silence(), { type: 'opus' })
+  if (oldState.member.id && newState.member.id === client.user.id) {
+    if (!oldState.channel && newState.channel) {
+      console.log('bot join')
+      // join, discord api does this already, but it seems to need it
+      // await sleep(1000)
+      await play(connection, new Silence(), { type: 'opus' })
       connection.setSpeaking(0)
       await channels.set(newState.channel.id, true)
-    } else if(!newState.channel) {
+    } else if (!newState.channel) {
+      console.log('bot leave')
       // leave
       await channels.delete(oldState.channel.id)
-    } else if(oldState.channelID !== newState.channelID) {
+    } else if (oldState.channelID !== newState.channelID) {
       // move
+      console.log('bot move')
       await channels.delete(oldState.channel.id)
       await channels.set(newState.channel.id, true)
     }
@@ -53,8 +58,9 @@ export default async (
     return
   }
 
-  // Events to be spoken in the bot's channe
+  // Events to be spoken in the same channel
   if (oldState.channelID === newState.channelID) {
+    console.log('same channel event')
     if (!oldState.serverMute && newState.serverMute) {
       message = 'has been server muted'
     } else if (oldState.serverMute && !newState.serverMute) {
@@ -84,6 +90,7 @@ export default async (
    * Check if the user has a custom message in the DB, if not play default
    */
   if (newState.channel && isBotInChannel(connections, newState.channel)) {
+    console.log('user join')
     const customMessage = await getPhraseForMember({
       guildId: newState.guild.id,
       memberId: newState.member.id,
@@ -94,6 +101,7 @@ export default async (
     oldState.channel &&
     isBotInChannel(connections, oldState.channel)
   ) {
+    console.log('user leave')
     const customMessage = await getPhraseForMember({
       guildId: oldState.guild.id,
       memberId: oldState.member.id,

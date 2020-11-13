@@ -15,7 +15,7 @@ export default async (client: CommandoClient) => {
   setActivity(client)
 
   // Rejoin all cached channels
-  client.guilds.cache.map(guild => {
+  client.guilds.cache.map(async guild => {
     guild.channels.cache.map(async (channel) => {
       const joinThisChannel = await channels.get(channel.id)
       if(joinThisChannel) {

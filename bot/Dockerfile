@@ -21,7 +21,7 @@ RUN npm install
 COPY . .
 
 # Compile Typescript
-RUN npm run tsc
+RUN npm run build
 
 # Run
 CMD ["node", "dist/index.js"]

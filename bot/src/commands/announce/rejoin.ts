@@ -1,7 +1,6 @@
 import { Message } from 'discord.js'
 import { Command, CommandoClient, CommandoMessage } from 'discord.js-commando'
 
-import { Silence } from '../../lib/silence'
 import { sleep } from '../../lib/utils'
 
 export class JoinCommand extends Command {
@@ -30,9 +29,7 @@ export class JoinCommand extends Command {
     try {
       channel.leave()
       await sleep(1000)
-      const connection = await channel.join()
-      connection.play(new Silence(), { type: 'opus' })
-      connection.setSpeaking(0)
+      await channel.join()
     } catch (err) {
       return message.say('I need permission to join your voice channel.')
     }

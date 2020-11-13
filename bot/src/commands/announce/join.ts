@@ -1,8 +1,6 @@
 import { Message } from 'discord.js'
 import { Command, CommandoClient, CommandoMessage } from 'discord.js-commando'
 
-import { Silence } from '../../lib/silence'
-
 export class JoinCommand extends Command {
   public constructor(client: CommandoClient) {
     super(client, {
