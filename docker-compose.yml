@@ -10,13 +10,14 @@ services:
       - "6379:6379"
     volumes:
       - ./cache:/data
-      - ./settings.db:/dist/settings.db
 
   bot:
     build:
       context: ./bot
     depends_on:
       - redis
+    volumes:
+      - ./settings:/dist/settings
     environment:
       DISCORD_TOKEN: ${DISCORD_TOKEN}
       OWNER_ID: ${OWNER_ID}
