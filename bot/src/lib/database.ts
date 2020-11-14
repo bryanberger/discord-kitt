@@ -1,3 +1,4 @@
+import { CommandoClient } from 'discord.js-commando'
 import Keyv from 'keyv'
 
 const redisUrl =
@@ -12,7 +13,9 @@ export const channels = new Keyv(redisUrl, { namespace: 'channels' })
 // Handle DB connection errors
 join.on('error', (err) => console.log('DB Connection Error (join)', err))
 leave.on('error', (err) => console.log('DB Connection Error (leave)', err))
-channels.on('error', (err) => console.log('DB Connection Error (channels)', err))
+channels.on('error', (err) =>
+  console.log('DB Connection Error (channels)', err),
+)
 
 // Helpers for setting the guild object
 export type PhraseType = 'join' | 'leave'
@@ -24,6 +27,10 @@ export interface PhraseGet {
 
 export interface PhraseGetMember extends PhraseGet {
   memberId: string
+}
+
+export interface PhraseGetGuild extends PhraseGet {
+  client: CommandoClient
 }
 
 export interface PhraseSet extends PhraseGet {
@@ -40,15 +47,15 @@ export const setPhraseForMember = async (obj: PhraseSet) => {
   const { guildId, memberId, type, message } = obj
   const namespace = type === 'join' ? join : leave
 
-  let guild = await namespace.get(guildId)
+  let member = await namespace.get(memberId)
 
-  if (typeof guild === 'undefined') {
-    guild = {}
+  if (typeof member === 'undefined') {
+    member = {}
   }
 
-  guild[memberId] = message
+  member[guildId] = message
 
-  return await namespace.set(guildId, guild)
+  return await namespace.set(memberId, member)
 }
 
 export const getPhraseForMember = async (
@@ -57,18 +64,33 @@ export const getPhraseForMember = async (
   const { guildId, type, memberId } = obj
   const namespace = type === 'join' ? join : leave
 
-  const guild = await namespace.get(guildId)
+  const member = await namespace.get(memberId)
 
-  if (typeof guild === 'undefined') {
+  if (typeof member === 'undefined') {
     return null
   } else {
-    return guild[memberId] || null
+    return member[guildId] || null
   }
 }
 
-export const getAllPhrases = async (obj: PhraseGet): Promise<any> => {
-  const { guildId, type } = obj
+export const getAllPhrasesForGuild = async (
+  obj: PhraseGetGuild,
+): Promise<any> => {
+  const { guildId, type, client } = obj
   const namespace = type === 'join' ? join : leave
+  const members = {}
 
-  return await namespace.get(guildId) || {}
+  const guild = client.guilds.cache.get(guildId)
+
+  if (guild) {
+    // loop through all members of the guild, looking to see if they have a cached message
+    guild.members.cache.map(async (member) => {
+      const message = await namespace.get(member.id)
+      if (message) {
+        members[member.id] = message
+      }
+    })
+  }
+
+  return members
 }
