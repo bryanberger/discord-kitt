@@ -51,13 +51,6 @@ export const setPhraseForMember = async (obj: PhraseSet) => {
   return await namespace.set(guildId, guild)
 }
 
-export const getAllPhrases = async (obj: PhraseGet): Promise<string> => {
-  const { guildId, type } = obj
-  const namespace = type === 'join' ? join : leave
-
-  return await namespace.get(guildId) || {}
-}
-
 export const getPhraseForMember = async (
   obj: PhraseGetMember,
 ): Promise<string | null> => {
@@ -71,4 +64,11 @@ export const getPhraseForMember = async (
   } else {
     return guild[memberId] || null
   }
+}
+
+export const getAllPhrases = async (obj: PhraseGet): Promise<any> => {
+  const { guildId, type } = obj
+  const namespace = type === 'join' ? join : leave
+
+  return await namespace.get(guildId) || {}
 }

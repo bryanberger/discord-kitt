@@ -9,7 +9,6 @@ import { CommandoClient } from 'discord.js-commando'
 import { say, play } from '../lib/announce'
 import { channels, getPhraseForMember } from '../lib/database'
 import { Silence } from '../lib/silence'
-import { sleep } from '../lib/utils'
 
 export default async (
   oldState: VoiceState,

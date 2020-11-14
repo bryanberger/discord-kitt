@@ -1,4 +1,4 @@
-import { Channel, VoiceChannel } from "discord.js"
+import { VoiceChannel } from "discord.js"
 import { CommandoClient } from "discord.js-commando"
 
 import { channels } from "../lib/database"

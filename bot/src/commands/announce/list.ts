@@ -1,6 +1,5 @@
 import { Message } from 'discord.js'
 import { Command, CommandoClient, CommandoMessage } from 'discord.js-commando'
-import { join } from 'path'
 import { getAllPhrases } from '../../lib/database'
 
 export class ListCommand extends Command {
