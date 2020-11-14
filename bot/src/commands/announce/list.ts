@@ -1,6 +1,6 @@
 import { Message } from 'discord.js'
 import { Command, CommandoClient, CommandoMessage } from 'discord.js-commando'
-import { getAllPhrasesForGuild } from '../../lib/database'
+import { getAllPhrases } from '../../lib/database'
 
 export class ListCommand extends Command {
   public constructor(client: CommandoClient) {
@@ -20,15 +20,13 @@ export class ListCommand extends Command {
   public async run(
     message: CommandoMessage,
   ): Promise<Message | Message[] | null> {
-    const joins = await getAllPhrasesForGuild({
+    const joins = await getAllPhrases({
       guildId: message.guild.id,
-      client: this.client,
       type: 'join',
     })
 
-    const leaves = await getAllPhrasesForGuild({
+    const leaves = await getAllPhrases({
       guildId: message.guild.id,
-      client: this.client,
       type: 'leave',
     })
 
