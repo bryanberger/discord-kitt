@@ -18,6 +18,10 @@ const client = new CommandoClient({
   commandPrefix: '!',
   owner: process.env.OWNER_ID,
   disableMentions: 'everyone',
+  // partials: ['']
+  ws: {
+    intents: ['GUILDS', 'GUILD_MEMBERS', 'GUILD_VOICE_STATES', 'GUILD_MESSAGES', 'DIRECT_MESSAGES']
+  }
 })
 
 // SQLite for commando guild settings syncing

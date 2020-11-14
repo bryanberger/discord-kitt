@@ -13,7 +13,7 @@
     "run": "node dist/index.js",
     "clean": "rimraf dist",
     "build": "npm-run-all clean tsc",
-    "watch": "nodemon -e js,ts --delay 2 --watch src --exec npm start"
+    "watch": "nodemon -e js,ts --watch src --exec npm start"
   },
   "author": "",
   "license": "ISC",

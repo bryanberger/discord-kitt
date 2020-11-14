@@ -21,14 +21,12 @@ export class ListCommand extends Command {
     message: CommandoMessage,
   ): Promise<Message | Message[] | null> {
     const joins = await getAllPhrasesForGuild({
-      guildId: message.guild.id,
-      client: this.client,
+      guild: message.guild,
       type: 'join',
     })
 
     const leaves = await getAllPhrasesForGuild({
-      guildId: message.guild.id,
-      client: this.client,
+      guild: message.guild,
       type: 'leave',
     })
 
@@ -45,7 +43,7 @@ export class ListCommand extends Command {
     }
 
     const guildName = message.guild.name
-    const output = `__**The Phrase List for ${guildName}**__:\n\n__Join Phrases__\n${joinOutput}\n__Leave Phrases__\n${leaveOutput}`
+    const output = `__**The Phrase List for ${guildName}**__:\n\n__Join Phrases:__\n${joinOutput}\n__Leave Phrases:__\n${leaveOutput}`
     const messages = []
     try {
       messages.push(await message.direct(output))

@@ -1,4 +1,4 @@
-import { CommandoClient } from 'discord.js-commando'
+import { CommandoGuild } from 'discord.js-commando'
 import Keyv from 'keyv'
 
 const redisUrl =
@@ -29,8 +29,9 @@ export interface PhraseGetMember extends PhraseGet {
   memberId: string
 }
 
-export interface PhraseGetGuild extends PhraseGet {
-  client: CommandoClient
+export interface PhraseGetGuild {
+  guild: CommandoGuild
+  type: PhraseType
 }
 
 export interface PhraseSet extends PhraseGet {
@@ -76,21 +77,19 @@ export const getPhraseForMember = async (
 export const getAllPhrasesForGuild = async (
   obj: PhraseGetGuild,
 ): Promise<any> => {
-  const { guildId, type, client } = obj
+  const { guild, type } = obj
   const namespace = type === 'join' ? join : leave
   const members = {}
 
-  const guild = client.guilds.cache.get(guildId)
+  const allMembers = await guild.members.fetch()
 
-  if (guild) {
-    // loop through all members of the guild, looking to see if they have a cached message
-    guild.members.cache.map(async (member) => {
-      const message = await namespace.get(member.id)
-      if (message) {
-        members[member.id] = message
-      }
-    })
-  }
+  allMembers.map(async (member) => {
+    const messages = await namespace.get(member.id)
+
+    if (messages !== typeof 'undefined' && messages[guild.id]) {
+      members[member.id] = messages[guild.id]
+    }
+  })
 
   return members
 }
