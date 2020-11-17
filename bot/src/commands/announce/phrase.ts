@@ -79,7 +79,7 @@ export class PhraseCommand extends Command {
     message: CommandoMessage,
     args: PhraseCommandArgs,
   ): Promise<Message | Message[] | null> {
-    const member = args.member === '' ? null : args.member ?? message.member
+    const member = args.member !== '' ? args.member : message.member
 
     if (args.type === 'join') {
       await setPhraseForMember({
