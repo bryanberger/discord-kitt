@@ -33,13 +33,17 @@ export class ListCommand extends Command {
     let joinOutput = ''
     for (const [key, value] of Object.entries(joins)) {
       const member = message.guild.members.cache.get(key)
-      joinOutput += `**${member.displayName}**: ${value}\n`
+      if (member) {
+        joinOutput += `**${member.displayName}**: ${value}\n`
+      }
     }
 
     let leaveOutput = ''
     for (const [key, value] of Object.entries(leaves)) {
       const member = message.guild.members.cache.get(key)
-      leaveOutput += `**${member.displayName}**: ${value}\n`
+      if (member) {
+        leaveOutput += `**${member.displayName}**: ${value}\n`
+      }
     }
 
     const guildName = message.guild.name
