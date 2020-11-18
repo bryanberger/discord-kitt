@@ -32,7 +32,7 @@ export class ListCommand extends Command {
 
     let joinOutput = ''
     for (const [key, value] of Object.entries(joins)) {
-      const member = message.guild.members.cache.get(key)
+      const member = await message.guild.members.fetch(key)
       if (member) {
         joinOutput += `**${member.displayName}**: ${value}\n`
       }
@@ -40,7 +40,7 @@ export class ListCommand extends Command {
 
     let leaveOutput = ''
     for (const [key, value] of Object.entries(leaves)) {
-      const member = message.guild.members.cache.get(key)
+      const member = await message.guild.members.fetch(key)
       if (member) {
         leaveOutput += `**${member.displayName}**: ${value}\n`
       }
