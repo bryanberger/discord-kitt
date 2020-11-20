@@ -81,6 +81,8 @@ export default async (
     if (message !== null) {
       return await say(connection, `${username} ${message}`)
     }
+    
+    return
   }
 
   /**
