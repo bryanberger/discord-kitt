@@ -9,7 +9,7 @@ const WAIT = 5
 export interface PhraseCommandArgs {
   type: 'join' | 'leave'
   phrase: string
-  member?: GuildMember | ''
+  member?: GuildMember | null
 }
 
 /**
@@ -47,6 +47,10 @@ export class PhraseCommand extends Command {
           type: 'member',
           default: '',
           wait: WAIT,
+          validate: () => {
+            // we validate in the run function
+            return true
+          },
         },
         {
           key: 'phrase',
@@ -79,7 +83,7 @@ export class PhraseCommand extends Command {
     message: CommandoMessage,
     args: PhraseCommandArgs,
   ): Promise<Message | Message[] | null> {
-    const member = args.member !== '' ? args.member : message.member
+    const member = args.member !== null ? args.member : message.member
 
     if (args.type === 'join') {
       await setPhraseForMember({
