@@ -9,6 +9,7 @@ import { CommandoClient } from 'discord.js-commando'
 import { say, play } from '../lib/announce'
 import { channels, getPhraseForMember } from '../lib/database'
 import { Silence } from '../lib/silence'
+import { DEFAULT_JOIN_MESSAGE, DEFAULT_LEAVE_MESSAGE } from '../lib/constants'
 
 export default async (
   oldState: VoiceState,
@@ -81,7 +82,7 @@ export default async (
     if (message !== null) {
       return await say(connection, `${username} ${message}`)
     }
-    
+
     return
   }
 
@@ -92,23 +93,25 @@ export default async (
    */
   if (newState.channel && isBotInChannel(connections, newState.channel)) {
     console.log('user join')
-    const customMessage = await getPhraseForMember({
-      guildId: newState.guild.id,
-      memberId: newState.member.id,
-      type: 'join',
-    })
-    message = customMessage ?? 'has joined the channel'
+    message =
+      (await getPhraseForMember({
+        guildId: newState.guild.id,
+        memberId: newState.member.id,
+        type: 'join',
+      })) ??
+      client.provider.get(newState.guild.id, 'join', DEFAULT_JOIN_MESSAGE)
   } else if (
     oldState.channel &&
     isBotInChannel(connections, oldState.channel)
   ) {
     console.log('user leave')
-    const customMessage = await getPhraseForMember({
-      guildId: oldState.guild.id,
-      memberId: oldState.member.id,
-      type: 'leave',
-    })
-    message = customMessage ?? 'has left the channel'
+    message =
+      (await getPhraseForMember({
+        guildId: oldState.guild.id,
+        memberId: oldState.member.id,
+        type: 'leave',
+      })) ??
+      client.provider.get(newState.guild.id, 'leave', DEFAULT_LEAVE_MESSAGE)
   }
 
   if (message !== null) {

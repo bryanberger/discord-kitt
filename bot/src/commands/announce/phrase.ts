@@ -4,7 +4,7 @@ import { setPhraseForMember } from '../../lib/database'
 
 const MIN_CHARS = 10
 const MAX_CHARS = 140
-const WAIT = 5
+const WAIT = 8
 
 export interface PhraseCommandArgs {
   type: 'join' | 'leave'

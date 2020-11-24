@@ -21,12 +21,12 @@ export class JoinCommand extends Command {
     message: CommandoMessage,
   ): Promise<Message | Message[] | null> {
     if (!message.member.voice.channel) {
-      return message.say('You need to be in a voice channel to summon me.')
+      return message.reply('You need to be in a voice channel to summon me.')
     }
     try {
       await message.member.voice.channel.join()
     } catch (err) {
-      return message.say('I need permission to join your voice channel.')
+      return message.reply('I need permission to join your voice channel.')
     }
   }
 }
