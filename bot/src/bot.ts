@@ -3,6 +3,9 @@
  * TODO:
  *
  * - Use Winston for logging
+ * - Custom !help command
+ * - Welcome command, after joined by user tell them how to use it
+ * - Redis only provider, get rid of SQLlite
  */
 import path from 'path'
 import { CommandoClient, SyncSQLiteProvider } from 'discord.js-commando'
@@ -18,11 +21,14 @@ const client = new CommandoClient({
   commandPrefix: '!',
   owner: process.env.OWNER_ID,
   disableMentions: 'everyone',
+  invite: 'https://discord.gg/8ZsAYZ8Smd',
 })
 
 // SQLite for commando guild settings syncing
 client.setProvider(
-  new SyncSQLiteProvider(new sqlite3(path.join(__dirname, 'settings/settings.db'))),
+  new SyncSQLiteProvider(
+    new sqlite3(path.join(__dirname, 'settings/settings.db')),
+  ),
 )
 
 client.registry
