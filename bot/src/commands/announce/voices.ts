@@ -1,6 +1,6 @@
 import { Message, MessageEmbed } from 'discord.js'
 import { Command, CommandoClient, CommandoMessage } from 'discord.js-commando'
-import { voices } from '../../lib/polly'
+import { numVoices, voices } from '../../lib/polly'
 
 export class VoicesCommand extends Command {
   public constructor(client: CommandoClient) {
@@ -20,7 +20,7 @@ export class VoicesCommand extends Command {
     message: CommandoMessage,
   ): Promise<Message | Message[] | null> {
     const embed = new MessageEmbed()
-      .setTitle(`**Voices (${voices.size})**`)
+      .setTitle(`**Voices (${numVoices})**`)
       .setDescription(`The default voice is \`Amy\` (en-GB)`)
       .setColor(`#35e07c`)
 

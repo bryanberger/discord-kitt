@@ -14,7 +14,12 @@ const languageCodes = []
 
 export const voices = new Discord.Collection<string, AWS.Polly.Voice[]>()
 
-export const synth = (text: string, voiceId?: VoiceId): Promise<PassThrough> => {
+export let numVoices = 0
+
+export const synth = (
+  text: string,
+  voiceId?: VoiceId,
+): Promise<PassThrough> => {
   const params: SynthesizeSpeechInput = {
     Text: text,
     Engine: 'standard',
@@ -48,20 +53,19 @@ export const loadAndCacheVoices = () => {
       return
     }
 
-    console.debug(`Number of voices: ${data.Voices.length}`)
+    numVoices = data.Voices.length
+
+    console.debug(`Number of voices: ${numVoices}`)
 
     if (!data.Voices) {
       console.error('No voices returned from Polly')
       return
     }
 
-    for (let i = 0; i < data.Voices.length; i++) {
+    for (let i = 0; i < numVoices; i++) {
       const voice = data.Voices[i]
       const key = voice.LanguageCode
-      const isStandard = voice.SupportedEngines.includes('standard')
-
-      if(!isStandard) continue
-
+     
       if (voices.has(key)) {
         voices.get(key).push(voice)
       } else {
@@ -76,5 +80,5 @@ export const loadAndCacheVoices = () => {
     console.debug('Voices and codes loaded')
   }
 
-  Polly.describeVoices({}, cacheVoicesAndLangCodes)
+  Polly.describeVoices({ Engine: 'standard' }, cacheVoicesAndLangCodes)
 }
