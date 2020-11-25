@@ -9,7 +9,11 @@ import { CommandoClient } from 'discord.js-commando'
 import { say, play } from '../lib/announce'
 import { channels, getPhraseForMember } from '../lib/database'
 import { Silence } from '../lib/silence'
-import { DEFAULT_JOIN_MESSAGE, DEFAULT_LEAVE_MESSAGE } from '../lib/constants'
+import {
+  DEFAULT_JOIN_MESSAGE,
+  DEFAULT_LEAVE_MESSAGE,
+  DEFAULT_VOICE_ID,
+} from '../lib/constants'
 
 export default async (
   oldState: VoiceState,
@@ -19,6 +23,12 @@ export default async (
   const connections = client.voice.connections
   const connection = connections.get(oldState.guild.id)
   const username = oldState.member.nickname || oldState.member.user.username
+  const guildVoiceId = client.provider.get(
+    newState.guild.id,
+    'voiceId',
+    DEFAULT_VOICE_ID,
+  )
+
   let message: string = null
 
   // Self
@@ -80,7 +90,7 @@ export default async (
     }
 
     if (message !== null) {
-      return await say(connection, `${username} ${message}`)
+      return await say(connection, `${username} ${message}`, guildVoiceId)
     }
 
     return
@@ -115,7 +125,7 @@ export default async (
   }
 
   if (message !== null) {
-    return await say(connection, `${username} ${message}`)
+    return await say(connection, `${username} ${message}`, guildVoiceId)
   }
 }
 
