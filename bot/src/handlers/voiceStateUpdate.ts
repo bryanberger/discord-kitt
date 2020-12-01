@@ -1,9 +1,4 @@
-import {
-  Collection,
-  VoiceChannel,
-  VoiceConnection,
-  VoiceState,
-} from 'discord.js'
+import { VoiceState } from 'discord.js'
 import { CommandoClient } from 'discord.js-commando'
 
 import { say, play } from '../lib/announce'
@@ -14,6 +9,7 @@ import {
   DEFAULT_LEAVE_MESSAGE,
   DEFAULT_VOICE_ID,
 } from '../lib/constants'
+import { isBotInChannel } from '../lib/utils'
 
 export default async (
   oldState: VoiceState,
@@ -33,6 +29,8 @@ export default async (
 
   // Self
   if (oldState.member.id && newState.member.id === client.user.id) {
+    await channels.set('count', connections.size)
+
     if (!oldState.channel && newState.channel) {
       console.log('bot join')
       // join, discord api does this already, but it seems to need it
@@ -50,6 +48,7 @@ export default async (
       await channels.delete(oldState.channel.id)
       await channels.set(newState.channel.id, true)
     }
+
     return
   }
 
@@ -127,11 +126,4 @@ export default async (
   if (message !== null) {
     return await say(connection, `${username} ${message}`, guildVoiceId)
   }
-}
-
-const isBotInChannel = (
-  connections: Collection<string, VoiceConnection>,
-  channel: VoiceChannel,
-) => {
-  return connections.some((connection) => connection.channel.id === channel.id)
 }

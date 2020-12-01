@@ -3,21 +3,58 @@ services:
   redis:
     image: redis:latest
     container_name: cache
+    restart: unless-stopped
     command: bash -c "redis-server --appendonly yes"
     expose:
       - 6379
     ports:
-      - "6379:6379"
+      - 6379:6379
     volumes:
       - ./cache:/data
+
+  prometheus:
+    image: prom/prometheus
+    container_name: prometheus
+    restart: always
+    expose:
+      - 9090
+    ports:
+      - 9090:9090
+    volumes:
+      - ./prometheus.yml:/etc/prometheus/prometheus.yml
+      - prometheus_data:/prometheus
+
+  grafana:
+    image: grafana/grafana
+    ports:
+      - 3000:3000
+    depends_on:
+      - prometheus
+    environment:
+      GF_SECURITY_ADMIN_PASSWORD: ${GF_SECURITY_ADMIN_PASSWORD}
+    volumes:
+      - grafana_data:/var/lib/grafana
 
   bot:
     build:
       context: ./bot
+      args:
+        REDIS_URL: ${REDIS_URL}
+        NODE_ENV: production
+    command: npm run start:dev
     depends_on:
       - redis
+      - prometheus
+    ports:
+      - 3001:3001
+    # restart: unless-stopped
     volumes:
-      - ./settings:/usr/src/app/dist/settings
+      - ./bot:/usr/src/app
+      # - ./bot/src/:/usr/src/app/src/
+      # - ./bot/package.json:/usr/src/app/package.json
+      # - ./bot/package-lock.json:/usr/src/app/package-lock.json
+      # - ./bot/tsconfig.json:/usr/src/app/tsconfig.json
+      - /usr/src/app/node_modules
     environment:
       DISCORD_TOKEN: ${DISCORD_TOKEN}
       OWNER_ID: ${OWNER_ID}
@@ -25,3 +62,8 @@ services:
       AWS_SECRET_ACCESS_KEY: ${AWS_SECRET_ACCESS_KEY}
       AWS_DEFAULT_REGION: ${AWS_DEFAULT_REGION}
       REDIS_URL: ${REDIS_URL}
+      NODE_ENV: production
+
+volumes:
+  prometheus_data:
+  grafana_data:

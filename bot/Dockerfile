@@ -1,27 +1,20 @@
-FROM node:14.15.0-slim
-
-RUN apt-get update && apt-get install \
-    python make git curl g++ \
-    -yq --no-install-suggests --no-install-recommends --allow-downgrades --allow-remove-essential --allow-change-held-packages \
-  && apt-get clean
-
-# Env
-ENV NODE_ENV=production
-
-# Create app directory
+FROM node:14-alpine AS builder
+ARG REDIS_URL=redis://cache
+ENV REDIS_URL=${REDIS_URL}
+ARG REDIS_URL=redis://cache
+ENV REDIS_URL=${REDIS_URL}
+RUN apk add --no-cache python make git curl g++
 WORKDIR /usr/src/app
-
-# A wildcard is used to ensure both package.json AND package-lock.json are copied
 COPY package*.json ./
-
-# Install app dependencies
-RUN npm install
-
-# Bundle app source
+RUN npm ci
+COPY tsconfig*.json ./
 COPY . .
-
-# Compile Typescript
 RUN npm run build
 
-# Run
+FROM node:14-alpine
+WORKDIR /usr/src/app
+# RUN chown -R node:node .
+# USER node
+RUN npm install -g nodemon
+COPY --from=builder /usr/src/app/ .
 CMD ["node", "dist/index.js"]
