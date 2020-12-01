@@ -13,7 +13,7 @@ export class EventsCommand extends Command {
       group: 'announce',
       memberName: 'events',
       description:
-        'List all same-channel events and if they are enabled or note',
+        'List the state of all announcement events (if they are enabled or not)',
       throttling: {
         usages: 1,
         duration: 5,
@@ -37,7 +37,7 @@ export class EventsCommand extends Command {
     const embed = new MessageEmbed()
       .setTitle(`**Events**`)
       .setDescription(
-        `List of all same-channel events and if they are enabled or not. Eg: when someone mutes, deafens, starts a stream.`,
+        `List the state of all announcement events Eg: when someone joins, leaves, mutes, starts a stream, or to ignore bots.`,
       )
       .setColor(`#35e07c`)
 
