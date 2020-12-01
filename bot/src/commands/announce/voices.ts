@@ -13,6 +13,7 @@ export class VoicesCommand extends Command {
         usages: 1,
         duration: 5,
       },
+      guarded: true,
     })
   }
 

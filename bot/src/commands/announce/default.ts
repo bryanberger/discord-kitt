@@ -3,10 +3,9 @@ import { Command, CommandoClient, CommandoMessage } from 'discord.js-commando'
 import {
   DEFAULT_JOIN_MESSAGE,
   DEFAULT_LEAVE_MESSAGE,
+  MIN_CHARS,
+  MAX_CHARS,
 } from '../../lib/constants'
-
-const MIN_CHARS = 10
-const MAX_CHARS = 140
 
 export interface PhraseCommandArgs {
   type: 'join' | 'leave'
@@ -68,9 +67,9 @@ export class DefaultCommand extends Command {
   ): Promise<Message | Message[] | null> {
     if (!args.type || !args.phrase) {
       const defaultJoin =
-        message.guild.settings.get('join') ?? DEFAULT_JOIN_MESSAGE
+        message.guild.settings.get('defaultJoin') ?? DEFAULT_JOIN_MESSAGE
       const defaultLeave =
-        message.guild.settings.get('leave') ?? DEFAULT_LEAVE_MESSAGE
+        message.guild.settings.get('defaultLeave') ?? DEFAULT_LEAVE_MESSAGE
 
       const embed = new MessageEmbed()
         .setTitle(`**Default Join/Leave Phrases**`)
@@ -86,10 +85,10 @@ export class DefaultCommand extends Command {
     }
 
     if (args.type === 'join') {
-      message.guild.settings.set('join', args.phrase)
+      message.guild.settings.set('defaultJoin', args.phrase)
       return message.reply(`The default \`join\` phrase was edited.`)
     } else if (args.type === 'leave') {
-      message.guild.settings.set('leave', args.phrase)
+      message.guild.settings.set('defaultLeave', args.phrase)
       return message.reply(`The default \`leave\` phrase was edited.`)
     }
   }

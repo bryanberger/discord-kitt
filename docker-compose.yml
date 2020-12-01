@@ -52,6 +52,7 @@ services:
     restart: unless-stopped
     volumes:
       - ./bot:/usr/src/app
+      - ./settings:/usr/src/app/settings
       - /usr/src/app/node_modules
     environment:
       DISCORD_TOKEN: ${DISCORD_TOKEN}
