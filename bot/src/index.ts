@@ -3,12 +3,10 @@ require('dotenv').config({ path: '../.env' })
 import path from 'path'
 import { ShardingManager } from 'discord.js'
 import { ensureDirectories } from './lib/directories'
-import { loadAndCacheVoices } from './lib/polly'
 import { startMetrics } from './lib/metrics'
 
 // Initializers
 ensureDirectories()
-loadAndCacheVoices()
 startMetrics()
 
 /* eslint-disable no-console */
