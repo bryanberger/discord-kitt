@@ -16,8 +16,7 @@ services:
     image: prom/prometheus
     container_name: prometheus
     restart: always
-    expose:
-      - 9090
+    command: --config.file=/etc/prometheus/prometheus.yml --storage.tsdb.path=/prometheus --storage.tsdb.retention=1y
     ports:
       - 9090:9090
     volumes:
@@ -47,13 +46,9 @@ services:
       - prometheus
     ports:
       - 3001:3001
-    # restart: unless-stopped
+    restart: unless-stopped
     volumes:
       - ./bot:/usr/src/app
-      # - ./bot/src/:/usr/src/app/src/
-      # - ./bot/package.json:/usr/src/app/package.json
-      # - ./bot/package-lock.json:/usr/src/app/package-lock.json
-      # - ./bot/tsconfig.json:/usr/src/app/tsconfig.json
       - /usr/src/app/node_modules
     environment:
       DISCORD_TOKEN: ${DISCORD_TOKEN}

@@ -9,7 +9,7 @@
 
 import express from 'express'
 import Prometheus from 'prom-client'
-import { channels, guilds, join, leave } from './database'
+import { announcements, channels, guilds, join, leave } from './database'
 
 const { Gauge, register, collectDefaultMetrics } = Prometheus
 
@@ -43,12 +43,18 @@ const leavePhraseTotal = new Gauge({
   help: 'Total number of leave phrases added by users',
 })
 
+const announcementsTotal = new Gauge({
+  name: 'announcement_phrase_total',
+  help: 'Total number of announcements and phrases said',
+})
+
 const updateMetrics = async () => {
   try {
     guildTotal.set(await guilds.get('count'))
     voiceTotal.set(await channels.get('count'))
     joinPhraseTotal.set(await join.get('count'))
     leavePhraseTotal.set(await leave.get('count'))
+    announcementsTotal.set(await announcements.get('count'))
   } catch (err) {
     // value may possibly not exist yet
   }
