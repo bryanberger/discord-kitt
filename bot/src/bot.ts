@@ -15,7 +15,6 @@ import voiceStateUpdate from './handlers/voiceStateUpdate'
 import guildCreate from './handlers/guildCreate'
 import guildDelete from './handlers/guildDelete'
 import ready from './handlers/ready'
-import { loadAndCacheVoices } from './lib/polly'
 
 // Client
 const client = new CommandoClient({
@@ -50,9 +49,6 @@ console.log(
   'Loaded Commands:',
   client.registry.commands.map((command) => command.name),
 )
-
-// Load/Cache AWS Polly Voices
-loadAndCacheVoices()
 
 client
   .on('error', console.error)

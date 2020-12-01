@@ -5,14 +5,22 @@ const redisUrl =
     ? process.env.REDIS_URL
     : 'redis://localhost:6379'
 
-const join = new Keyv(redisUrl, { namespace: 'join' })
-const leave = new Keyv(redisUrl, { namespace: 'leave' })
+export const join = new Keyv(redisUrl, { namespace: 'join' })
+export const leave = new Keyv(redisUrl, { namespace: 'leave' })
 export const channels = new Keyv(redisUrl, { namespace: 'channels' })
+export const guilds = new Keyv(redisUrl, { namespace: 'guilds' })
+export const announcements = new Keyv(redisUrl, { namespace: 'announcements' })
 
 // Handle DB connection errors
 join.on('error', (err) => console.log('DB Connection Error (join)', err))
 leave.on('error', (err) => console.log('DB Connection Error (leave)', err))
-channels.on('error', (err) => console.log('DB Connection Error (channels)', err))
+channels.on('error', (err) =>
+  console.log('DB Connection Error (channels)', err),
+)
+guilds.on('error', (err) => console.log('DB Connection Error (guilds)', err))
+announcements.on('error', (err) =>
+  console.log('DB Connection Error (announcements)', err),
+)
 
 // Helpers for setting the guild object
 export type PhraseType = 'join' | 'leave'
@@ -48,6 +56,10 @@ export const setPhraseForMember = async (obj: PhraseSet) => {
 
   guild[memberId] = message
 
+  // set count for use in prometheus
+  const count: number = (await namespace.get('count')) || 0
+  await namespace.set('count', count + 1)
+
   return await namespace.set(guildId, guild)
 }
 
@@ -70,5 +82,5 @@ export const getAllPhrases = async (obj: PhraseGet): Promise<any> => {
   const { guildId, type } = obj
   const namespace = type === 'join' ? join : leave
 
-  return await namespace.get(guildId) || {}
+  return (await namespace.get(guildId)) || {}
 }

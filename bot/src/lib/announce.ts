@@ -8,6 +8,7 @@ import {
 import { synth } from './polly'
 import { Readable } from 'stream'
 import { VoiceId } from 'aws-sdk/clients/polly'
+import { announcements } from './database'
 
 export const say = async (
   voiceConnection: VoiceConnection,
@@ -18,6 +19,8 @@ export const say = async (
     try {
       const stream = await synth(text, voiceId)
       await play(voiceConnection, stream)
+      const count: number = (await announcements.get('count')) || 0
+      await announcements.set('count', count + 1)
     } catch (err) {
       console.error(err)
     }
