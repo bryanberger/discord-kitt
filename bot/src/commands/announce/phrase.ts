@@ -1,10 +1,11 @@
 import { GuildMember, Message } from 'discord.js'
 import { Command, CommandoClient, CommandoMessage } from 'discord.js-commando'
 import { setPhraseForMember } from '../../lib/database'
-
-const MIN_CHARS = 10
-const MAX_CHARS = 140
-const WAIT = 8
+import {
+  MIN_CHARS,
+  MAX_CHARS,
+  WAIT
+} from '../../lib/constants'
 
 export interface PhraseCommandArgs {
   type: 'join' | 'leave'

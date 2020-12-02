@@ -1,14 +1,12 @@
 version: '3'
+
 services:
   redis:
     image: redis:latest
-    container_name: cache
-    restart: unless-stopped
+    container_name: "siribot-cache"
     command: bash -c "redis-server --appendonly yes"
     expose:
       - 6379
-    ports:
-      - 6379:6379
     volumes:
       - ./cache:/data
 
@@ -17,8 +15,8 @@ services:
     container_name: prometheus
     restart: always
     command: --config.file=/etc/prometheus/prometheus.yml --storage.tsdb.path=/prometheus --storage.tsdb.retention=1y
-    ports:
-      - 9090:9090
+    expose:
+      - 9090
     volumes:
       - ./prometheus.yml:/etc/prometheus/prometheus.yml
       - prometheus_data:/prometheus
@@ -37,23 +35,16 @@ services:
       - ./grafana/config.ini:/etc/grafana/config.ini
       - ./grafana/dashboards:/var/lib/grafana/dashboards
 
-  bot:
-    build:
-      context: ./bot
-      args:
-        REDIS_URL: ${REDIS_URL}
-        NODE_ENV: production
-    command: npm run start:dev
+  siribot:
+    container_name: "siribot"
+    image: smartdockerrepo.azurecr.io/deca/siribot:latest
+    restart: unless-stopped
     depends_on:
       - redis
-      - prometheus
-    ports:
-      - 3001:3001
-    restart: unless-stopped
+    expose:
+      - 3001
     volumes:
-      - ./bot:/usr/src/app
       - ./settings:/usr/src/app/settings
-      - /usr/src/app/node_modules
     environment:
       DISCORD_TOKEN: ${DISCORD_TOKEN}
       OWNER_ID: ${OWNER_ID}

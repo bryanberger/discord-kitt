@@ -28,7 +28,7 @@ const client = new CommandoClient({
 // SQLite for commando guild settings syncing
 client.setProvider(
   new SyncSQLiteProvider(
-    new sqlite3(path.join(__dirname, 'settings/settings.db')),
+    new sqlite3(path.join(__dirname, '../settings/settings.db')),
   ),
 )
 

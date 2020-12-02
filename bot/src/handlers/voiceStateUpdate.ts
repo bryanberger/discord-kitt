@@ -5,6 +5,7 @@ import { say, play } from '../lib/announce'
 import { channels, getPhraseForMember } from '../lib/database'
 import { Silence } from '../lib/silence'
 import {
+  DEFAULT_EVENTS,
   DEFAULT_JOIN_MESSAGE,
   DEFAULT_LEAVE_MESSAGE,
   DEFAULT_VOICE_ID,
@@ -24,6 +25,11 @@ export default async (
     'voiceId',
     DEFAULT_VOICE_ID,
   )
+  const announceJoin = client.provider.get(newState.guild.id, 'join', DEFAULT_EVENTS.join)
+  const announceLeave = client.provider.get(newState.guild.id, 'leave', DEFAULT_EVENTS.leave)
+  const announceBots = client.provider.get(newState.guild.id, 'bots', DEFAULT_EVENTS.bots)
+  const announceMute = client.provider.get(newState.guild.id, 'mute', DEFAULT_EVENTS.mute)
+  const announceStream = client.provider.get(newState.guild.id, 'stream', DEFAULT_EVENTS.stream)
 
   let message: string = null
 
@@ -52,40 +58,38 @@ export default async (
     return
   }
 
-  // Ignore other Bots
-  if (oldState.member.user.bot || newState.member.user.bot) {
-    return
-  }
-
-  // Ignore Streaming State
-  if (
-    (!oldState.streaming && newState.streaming) ||
-    (oldState.streaming && !newState.streaming) ||
-    (!oldState.selfVideo && newState.selfVideo) ||
-    (oldState.selfVideo && !newState.selfVideo)
-  ) {
+  // Other Bots
+  if (!announceBots && (oldState.member.user.bot || newState.member.user.bot)) {
     return
   }
 
   // Events to be spoken in the same channel
   if (oldState.channelID === newState.channelID) {
     console.log('same channel event')
-    if (!oldState.serverMute && newState.serverMute) {
+    if (announceMute && !oldState.serverMute && newState.serverMute) {
       message = 'has been server muted'
-    } else if (oldState.serverMute && !newState.serverMute) {
+    } else if (announceMute && oldState.serverMute && !newState.serverMute) {
       message = 'has been server unmuted'
-    } else if (!oldState.serverDeaf && newState.serverDeaf) {
+    } else if (announceMute && !oldState.serverDeaf && newState.serverDeaf) {
       message = 'has been server deafened'
-    } else if (oldState.serverDeaf && !newState.serverDeaf) {
+    } else if (announceMute && oldState.serverDeaf && !newState.serverDeaf) {
       message = 'has been server undeafened'
-    } else if (!oldState.deaf && newState.deaf === true) {
+    } else if (announceMute && !oldState.deaf && newState.deaf) {
       message = 'has deafened'
-    } else if (oldState.deaf && !newState.deaf) {
+    } else if (announceMute && oldState.deaf && !newState.deaf) {
       message = 'has undeafened'
-    } else if (!oldState.mute && newState.mute) {
+    } else if (announceMute && !oldState.mute && newState.mute) {
       message = 'has muted'
-    } else if (oldState.mute && !newState.mute) {
+    } else if (announceMute && oldState.mute && !newState.mute) {
       message = 'has unmuted'
+    } else if (announceStream && !oldState.streaming && newState.streaming) {
+      message = 'has started streaming'
+    } else if (announceStream && oldState.streaming && !newState.streaming) {
+      message = 'has stopped streaming'
+    } else if (announceStream && !oldState.selfVideo && newState.selfVideo) {
+      message = 'has started sharing video'
+    } else if (announceStream && oldState.selfVideo && !newState.selfVideo) {
+      message = 'has stopped sharing video'
     }
 
     if (message !== null) {
@@ -100,7 +104,11 @@ export default async (
    * Check see if we should play a `join` or `leave` message
    * Check if the user has a custom message in the DB, if not play default
    */
-  if (newState.channel && isBotInChannel(connections, newState.channel)) {
+  if (
+    announceJoin &&
+    newState.channel &&
+    isBotInChannel(connections, newState.channel)
+  ) {
     console.log('user join')
     message =
       (await getPhraseForMember({
@@ -108,8 +116,13 @@ export default async (
         memberId: newState.member.id,
         type: 'join',
       })) ??
-      client.provider.get(newState.guild.id, 'join', DEFAULT_JOIN_MESSAGE)
+      client.provider.get(
+        newState.guild.id,
+        'defaultJoin',
+        DEFAULT_JOIN_MESSAGE,
+      )
   } else if (
+    announceLeave &&
     oldState.channel &&
     isBotInChannel(connections, oldState.channel)
   ) {
@@ -120,7 +133,11 @@ export default async (
         memberId: oldState.member.id,
         type: 'leave',
       })) ??
-      client.provider.get(newState.guild.id, 'leave', DEFAULT_LEAVE_MESSAGE)
+      client.provider.get(
+        newState.guild.id,
+        'defaultLeave',
+        DEFAULT_LEAVE_MESSAGE,
+      )
   }
 
   if (message !== null) {
