@@ -1,6 +1,6 @@
-# Discord Siri Bot
+# Kitt: A Discord Bot
 
-A `docker` container that runs the `Siri` Announcer Bot.
+A `docker` container that runs the `Kitt` Announcer Bot.
 
 ## Setup
 
