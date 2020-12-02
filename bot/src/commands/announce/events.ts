@@ -1,6 +1,6 @@
 import { Message, MessageEmbed } from 'discord.js'
 import { Command, CommandoClient, CommandoMessage } from 'discord.js-commando'
-import { EVENTS, EventsType } from '../../lib/constants'
+import { DEFAULT_EVENTS, EVENTS, EventsType } from '../../lib/constants'
 
 export interface CommandArgs {
   event: EventsType
@@ -42,7 +42,7 @@ export class EventsCommand extends Command {
       .setColor(`#35e07c`)
 
     EVENTS.forEach((event) => {
-      embed.addField(event, message.guild.settings.get(event, false))
+      embed.addField(event, message.guild.settings.get(event, DEFAULT_EVENTS[event]))
     })
 
     const messages = []

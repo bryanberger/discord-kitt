@@ -4,8 +4,7 @@ import { play } from '../lib/announce'
 
 import { channels } from '../lib/database'
 import { Silence } from '../lib/silence'
-import { setActivity } from '../lib/utils'
-import { EVENTS, DEFAULT_EVENTS } from '../lib/constants'
+import { setActivity, setDefaultAnnnouncementSettings } from '../lib/utils'
 
 export default async (client: CommandoClient) => {
   // Log
@@ -17,16 +16,8 @@ export default async (client: CommandoClient) => {
   setActivity(client)
 
   client.guilds.cache.map(async (guild: CommandoGuild) => {
-    // Set default announcement event settings
-    EVENTS.forEach(async (event) => {
-      // not sure why we have to do this. otherwise its always undefined
-      await guild.settings.get(event)
-      const providerState = await client.provider.get(guild.id, event)
-
-      if (typeof providerState === 'undefined') {
-        await guild.settings.set(event, DEFAULT_EVENTS[event])
-      }
-    })
+    // Set default announcement event settings for ALL guilds if some were missed somehow
+    setDefaultAnnnouncementSettings(client, guild)
 
     // Rejoin all cached channels if possible
     guild.channels.cache.map(async (channel) => {

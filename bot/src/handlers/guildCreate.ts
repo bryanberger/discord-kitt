@@ -1,9 +1,10 @@
-import { Guild } from 'discord.js'
-import { CommandoClient } from 'discord.js-commando'
+import { CommandoClient, CommandoGuild } from 'discord.js-commando'
 
-import { setActivity } from '../lib/utils'
+import { setActivity, setDefaultAnnnouncementSettings } from '../lib/utils'
 
-export default async (guild: Guild, client: CommandoClient) => {
+export default async (guild: CommandoGuild, client: CommandoClient) => {
   setActivity(client)
-  // probably more stuff in the future, for now duplicates guildDelete
+
+  // Set default announcement event settings when a new guild is added
+  setDefaultAnnnouncementSettings(client, guild)
 }
