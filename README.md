@@ -30,7 +30,5 @@ chmox +x bin/deploy.sh
 
 ```
 npm install
-npm start
-
-# and start a redis instance (docker or otherwise)
+docker-compose up
 ```
