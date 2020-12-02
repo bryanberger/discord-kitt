@@ -1,6 +1,7 @@
 import { Polly } from 'aws-sdk'
 import { Message } from 'discord.js'
 import { Command, CommandoClient, CommandoMessage } from 'discord.js-commando'
+import { DEFAULT_VOICE_ID } from '../../lib/constants'
 import { voices } from '../../lib/polly'
 
 export class VoiceCommand extends Command {
@@ -59,6 +60,16 @@ export class VoiceCommand extends Command {
     message: CommandoMessage,
     args: { id: string },
   ): Promise<Message | Message[] | null> {
+    if (!args.id) {
+      const currentVoiceId = message.guild.settings.get(
+        'voiceId',
+        DEFAULT_VOICE_ID,
+      )
+      return message.reply(
+        `**${currentVoiceId}** is the current voice. Use the \`voices\` command for a list of available voices and \`voice <name>\` to set a new voice.`,
+      )
+    }
+
     if (this.validateVoiceId(args.id)) {
       const voiceId = this.getVoiceId(args.id)
       message.guild.settings.set('voiceId', voiceId)
