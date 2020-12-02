@@ -5,6 +5,7 @@ import { say, play } from '../lib/announce'
 import { channels, getPhraseForMember } from '../lib/database'
 import { Silence } from '../lib/silence'
 import {
+  DEFAULT_EVENTS,
   DEFAULT_JOIN_MESSAGE,
   DEFAULT_LEAVE_MESSAGE,
   DEFAULT_VOICE_ID,
@@ -24,11 +25,11 @@ export default async (
     'voiceId',
     DEFAULT_VOICE_ID,
   )
-  const announceJoin = client.provider.get(newState.guild.id, 'join')
-  const announceLeave = client.provider.get(newState.guild.id, 'leave')
-  const announceBots = client.provider.get(newState.guild.id, 'bots', false)
-  const announceMute = client.provider.get(newState.guild.id, 'mute', false)
-  const announceStream = client.provider.get(newState.guild.id, 'stream', false)
+  const announceJoin = client.provider.get(newState.guild.id, 'join', DEFAULT_EVENTS.join)
+  const announceLeave = client.provider.get(newState.guild.id, 'leave', DEFAULT_EVENTS.leave)
+  const announceBots = client.provider.get(newState.guild.id, 'bots', DEFAULT_EVENTS.bots)
+  const announceMute = client.provider.get(newState.guild.id, 'mute', DEFAULT_EVENTS.mute)
+  const announceStream = client.provider.get(newState.guild.id, 'stream', DEFAULT_EVENTS.stream)
 
   let message: string = null
 
