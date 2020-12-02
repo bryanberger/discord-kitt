@@ -2,7 +2,7 @@ import AWS, { AWSError } from 'aws-sdk'
 import Discord from 'discord.js'
 import { SynthesizeSpeechInput, VoiceId } from 'aws-sdk/clients/polly'
 import { PassThrough, Stream } from 'stream'
-import { DEFAULT_VOICE_ID } from './constants'
+import { DEFAULT_VOICE_ID, LEXICONS } from './constants'
 
 // Create an Polly client
 const Polly = new AWS.Polly({
@@ -24,6 +24,7 @@ export const synth = (
     Text: text,
     Engine: 'standard',
     OutputFormat: 'mp3',
+    LexiconNames: LEXICONS,
     VoiceId: voiceId ?? DEFAULT_VOICE_ID,
   }
 

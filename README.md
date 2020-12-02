@@ -32,3 +32,10 @@ chmox +x bin/deploy.sh
 npm install
 docker-compose up
 ```
+
+### Custom Lexicons
+
+Lexicons are XML/PLS files that describe pronunciation of specific words and phrases.
+Custom lexicons can be uploaded here: https://console.aws.amazon.com/polly/home/Lexicons
+
+and are references in `./bot/src/lib/constants.ts` under `LEXICONS`

@@ -13,3 +13,4 @@ export const DEFAULT_EVENTS = {
 export const MIN_CHARS = 10
 export const MAX_CHARS = 140
 export const WAIT = 8
+export const LEXICONS = ['custom']
