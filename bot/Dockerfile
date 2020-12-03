@@ -1,6 +1,6 @@
 FROM node:14.15.1-alpine3.12 AS builder
-ARG REDIS_URL=redis://cache
-ENV REDIS_URL=${REDIS_URL}
+ARG NODE_ENV=production
+ENV NODE_ENV=${NODE_ENV}
 ARG REDIS_URL=redis://cache
 ENV REDIS_URL=${REDIS_URL}
 RUN apk add --no-cache python3 make git curl g++

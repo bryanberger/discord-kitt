@@ -1,9 +1,11 @@
+import fs from 'fs-extra'
 import { Collection, VoiceChannel, VoiceConnection } from 'discord.js'
 import { CommandoClient, CommandoGuild } from 'discord.js-commando'
+
 import { DEFAULT_EVENTS, EVENTS } from './constants'
 import { guilds } from './database'
 
-export const sleep = (ms: number) => {
+export const sleep = (ms: number): Promise<void> => {
   return new Promise((resolve) => setTimeout(resolve, ms))
 }
 
@@ -33,4 +35,15 @@ export const setDefaultAnnnouncementSettings = (
       await guild.settings.set(event, DEFAULT_EVENTS[event])
     }
   })
+}
+
+export async function importDirectory(path: string) {
+  const files = fs.readdirSync(path)
+
+  for (const file of files) {
+    if (!file) continue
+
+    const currentPath = `${path}/${file}`
+    await require(currentPath)
+  }
 }
