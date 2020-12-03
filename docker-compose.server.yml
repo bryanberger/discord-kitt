@@ -53,10 +53,10 @@ services:
       AWS_SECRET_ACCESS_KEY: ${AWS_SECRET_ACCESS_KEY}
       AWS_DEFAULT_REGION: ${AWS_DEFAULT_REGION}
       REDIS_URL: ${REDIS_URL}
+      NODE_ENV: production
       TOP_GG: ${TOP_GG}
       DISCORD_BOTS_GG: ${DISCORD_BOTS_GG}
       DISCORD_BOT_LIST: ${DISCORD_BOT_LIST}
-      NODE_ENV: production
 
 volumes:
   prometheus_data:
