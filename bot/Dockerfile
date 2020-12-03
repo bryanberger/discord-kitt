@@ -40,4 +40,7 @@ COPY --chown=node:node --from=builder /build/dist/ dist/
 
 EXPOSE 3001
 
+# do this for now as we need write access to the sqllite db, look into changing this
+USER root
+
 CMD ["node", "dist/index.js"]
