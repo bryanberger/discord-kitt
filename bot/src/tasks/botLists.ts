@@ -84,7 +84,6 @@ botCache.tasks.set(`botlists`, {
         body: JSON.stringify(list.data),
       })
         .then((res) => {
-          console.log('Bot List Request Status:', res.status)
           if (res.status >= 200 && res.status < 300) {
             console.log(
               `Update bot lists: [${list.name}] ${totalGuilds} Guilds | ${totalUsers} Users`,

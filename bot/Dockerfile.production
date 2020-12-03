@@ -18,6 +18,7 @@ RUN npm ci
 
 COPY --chown=node:node src/ src/
 RUN npm run build
+RUN npm prune --production
 
 # 2nd Stage
 FROM node:14.15.1-alpine3.12

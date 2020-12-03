@@ -1,0 +1,9 @@
+{
+  "exec": "npm run build && npm start",
+  "ext": "ts",
+  "delay": 2,
+  "watch": [
+    "src/",
+    ".env"
+  ]
+}

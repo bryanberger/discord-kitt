@@ -39,6 +39,7 @@ services:
     container_name: "siribot"
     image: smartdockerrepo.azurecr.io/deca/siribot:latest
     restart: unless-stopped
+    command: node dist/index.js
     depends_on:
       - redis
     expose:

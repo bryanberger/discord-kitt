@@ -65,7 +65,6 @@ export default async (
 
   // Events to be spoken in the same channel
   if (oldState.channelID === newState.channelID) {
-    console.log('same channel event')
     if (announceMute && !oldState.serverMute && newState.serverMute) {
       message = 'has been server muted'
     } else if (announceMute && oldState.serverMute && !newState.serverMute) {
