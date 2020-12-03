@@ -1,9 +1,6 @@
 import Keyv from 'keyv'
 
-const redisUrl =
-  process.env.NODE_ENV === 'production'
-    ? process.env.REDIS_URL
-    : 'redis://localhost:6379'
+const redisUrl = process.env.REDIS_URL
 
 export const join = new Keyv(redisUrl, { namespace: 'join' })
 export const leave = new Keyv(redisUrl, { namespace: 'leave' })

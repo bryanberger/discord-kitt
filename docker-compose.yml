@@ -42,7 +42,7 @@ services:
       context: ./bot
       args:
         REDIS_URL: ${REDIS_URL}
-        NODE_ENV: production
+        NODE_ENV: ${NODE_ENV}
     command: npm run start:dev
     depends_on:
       - redis
@@ -57,11 +57,15 @@ services:
     environment:
       DISCORD_TOKEN: ${DISCORD_TOKEN}
       OWNER_ID: ${OWNER_ID}
+      BOT_ID: ${BOT_ID}
       AWS_ACCESS_KEY_ID: ${AWS_ACCESS_KEY_ID}
       AWS_SECRET_ACCESS_KEY: ${AWS_SECRET_ACCESS_KEY}
       AWS_DEFAULT_REGION: ${AWS_DEFAULT_REGION}
       REDIS_URL: ${REDIS_URL}
-      NODE_ENV: production
+      NODE_ENV: ${NODE_ENV}
+      TOP_GG: ${TOP_GG}
+      DISCORD_BOTS_GG: ${DISCORD_BOTS_GG}
+      DISCORD_BOT_LIST: ${DISCORD_BOT_LIST}
 
 volumes:
   prometheus_data:

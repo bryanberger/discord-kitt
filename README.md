@@ -18,13 +18,22 @@ Run via Docker, or locally via npm
 
 ### Docker
 
-```
-chmox +x bin/start.sh
-chmox +x bin/deploy.sh
+### Development
 
-./bin/start.sh
+Uses local `bot/src` so any changes made will cause the process to restart via nodemon.
+
+```
+docker-compose up
+```
+
+### Deploy
+
+```
+chmox +x bin/deploy.sh
 ./bin/deploy.sh
 ```
+
+_note:_ Remember to remove containers if switching `NODE_ENV` from production to development and vice-versa, as the image needs to be rebuilt and avoid pruning devDependencies.
 
 ### Locally
 

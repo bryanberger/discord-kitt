@@ -1,16 +1,12 @@
 import { VoiceChannel } from 'discord.js'
 import { CommandoClient, CommandoGuild } from 'discord.js-commando'
-import { play } from '../lib/announce'
+import { botCache } from '..'
 
 import { channels } from '../lib/database'
-import { Silence } from '../lib/silence'
 import { setActivity, setDefaultAnnnouncementSettings } from '../lib/utils'
 
 export default async (client: CommandoClient) => {
-  // Log
-  console.log(
-    `Client ready; logged in as ${client.user.username}#${client.user.discriminator} (${client.user.id})`,
-  )
+  botCache.isReady = true
 
   // Set Activity
   setActivity(client)
@@ -29,17 +25,15 @@ export default async (client: CommandoClient) => {
     })
   })
 
-  // Hack for now, say a Silence in each open voice connection every 2 minutes
-  setInterval(() => {
-    if (client.voice.connections.size > 0) {
-      console.log(
-        `play Silence() in ${client.voice.connections.size} voice channel(s)`,
-      )
+  // Run Recurring Tasks
+  for (const task of botCache.tasks.values()) {
+    setInterval(() => task.execute(), task.interval)
+  }
 
-      client.voice.connections.map(async (connection) => {
-        await play(connection, new Silence(), { type: 'opus' })
-        connection.setSpeaking(0)
-      })
-    }
-  }, 2 * 60 * 1000)
+  console.info(`Loaded ${botCache.tasks.size} Task(s)`)
+
+  // Log
+  console.log(
+    `Client ready; logged in as ${client.user.username}#${client.user.discriminator} (${client.user.id})`,
+  )
 }

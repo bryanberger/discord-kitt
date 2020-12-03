@@ -7,94 +7,93 @@
  * Summary: similar to a histogram, samples observations, it calculates configurable quantiles over a sliding time window
  */
 
-import express from 'express'
-import Prometheus from 'prom-client'
-import { announcements, channels, guilds, join, leave } from './database'
+import { Registry, Gauge, collectDefaultMetrics, Metric } from 'prom-client'
 
-const { Gauge, register, collectDefaultMetrics } = Prometheus
+export const register = new Registry()
 
-const app = express()
-const port = process.env.PORT || 3001
-let timer = null
+collectDefaultMetrics({ register })
 
-/** Include default metric */
-collectDefaultMetrics()
-
-/**
- * Metrics to log from the bot
- */
-const guildTotal = new Gauge({
+export const guildTotal = new Gauge({
   name: 'guild_total',
   help: 'Total number of guilds',
+  registers: [register],
 })
 
-const voiceTotal = new Gauge({
+export const voiceTotal = new Gauge({
   name: 'voice_total',
   help: 'Total number of voice connections',
+  registers: [register],
 })
 
-const joinPhraseTotal = new Gauge({
+export const joinPhraseTotal = new Gauge({
   name: 'join_phrase_total',
   help: 'Total number of join phrases added by users',
+  registers: [register],
 })
 
-const leavePhraseTotal = new Gauge({
+export const leavePhraseTotal = new Gauge({
   name: 'leave_phrase_total',
   help: 'Total number of leave phrases added by users',
+  registers: [register],
 })
 
-const announcementsTotal = new Gauge({
+export const announcementsTotal = new Gauge({
   name: 'announcement_phrase_total',
   help: 'Total number of announcements and phrases said',
+  registers: [register],
 })
 
-const updateMetrics = async () => {
-  try {
-    guildTotal.set(await guilds.get('count'))
-    voiceTotal.set(await channels.get('count'))
-    joinPhraseTotal.set(await join.get('count'))
-    leavePhraseTotal.set(await leave.get('count'))
-    announcementsTotal.set(await announcements.get('count'))
-  } catch (err) {
-    // value may possibly not exist yet
-  }
-}
+// export default class Metrics {
+//   private static instance: Metrics
 
-/**
- * Start an express server and expose a `/metrics` route for Prometheus to consume.
- * @param client CommandoClient
- */
-export const startMetrics = () => {
-  app.get('/metrics', async (_, res) => {
-    try {
-      res.set('Content-Type', register.contentType)
-      res.end(await register.metrics())
-    } catch (err) {
-      res.status(500).end(err)
-    }
-  })
+//   private _guildTotal: Gauge<undefined
+//   private _voiceTotal: Gauge<undefined>
+//   private _joinPhraseTotal: Gauge<undefined>
+//   private _leavePhraseTotal: Gauge<undefined>
+//   private _announcementsTotal: Gauge<undefined>
+//   private _register = new Registry()
 
-  app.listen(port, () => {
-    console.log(`[Prometheus metric server] Listening on port ${port}!`)
-  })
+//   constructor() {}
 
-  // Start: on init
-  updateMetrics()
+//   static getInstance() {
+//     if (!Metrics.instance) {
+//       Metrics.instance = new Metrics()
+//       collectDefaultMetrics({ register: Metrics.instance._register })
 
-  // Setup a poll, every 15s
-  timer = setInterval(updateMetrics, 15 * 1000)
-}
+//       Metrics.instance._guildTotal = new Gauge({
+//         name: 'guild_total',
+//         help: 'Total number of guilds',
+//         registers: [Metrics.instance._register],
+//       })
 
-/**
- * Gracefully terminate server on process exit
- */
-// process.on('SIGTERM', () => {
-//   server.close((err) => {
-//     if (err) {
-//       console.error(err)
-//       process.exit(1)
+//       Metrics.instance._voiceTotal = new Gauge({
+//         name: 'voice_total',
+//         help: 'Total number of voice connections',
+//         registers: [Metrics.instance._register],
+//       })
+
+//       Metrics.instance._joinPhraseTotal = new Gauge({
+//         name: 'join_phrase_total',
+//         help: 'Total number of join phrases added by users',
+//         registers: [Metrics.instance._register],
+//       })
+
+//       Metrics.instance._leavePhraseTotal = new Gauge({
+//         name: 'leave_phrase_total',
+//         help: 'Total number of leave phrases added by users',
+//         registers: [Metrics.instance._register],
+//       })
+
+//       Metrics.instance._announcementsTotal = new Gauge({
+//         name: 'announcement_phrase_total',
+//         help: 'Total number of announcements and phrases said',
+//         registers: [Metrics.instance._register],
+//       })
 //     }
+//     return Metrics.instance
+//   }
 
-//     process.exit(0)
-//   })
-// })
+//   get guildTotal() {
+//     return this._guildTotal
+//   }
+// }
