@@ -42,7 +42,7 @@ services:
       context: ./bot
       args:
         REDIS_URL: ${REDIS_URL}
-        NODE_ENV: development
+        NODE_ENV: ${NODE_ENV}
     command: npm run start:dev
     depends_on:
       - redis

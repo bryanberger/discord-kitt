@@ -1,4 +1,3 @@
-
 # 1st Stage
 FROM node:14.15.1-alpine3.12 AS builder
 
@@ -19,6 +18,8 @@ RUN npm ci
 COPY --chown=node:node src/ src/
 RUN npm run build
 
+RUN npm prune --production
+
 # 2nd Stage
 FROM node:14.15.1-alpine3.12
 
@@ -33,9 +34,9 @@ USER node
 
 WORKDIR /usr/src/app
 
+COPY --chown=node:node --from=builder /build/package.json /build/package-lock.json ./
 COPY --chown=node:node --from=builder /build/node_modules/ node_modules/
 COPY --chown=node:node --from=builder /build/dist/ dist/
-COPY --chown=node:node --from=builder /build/package.json /build/package-lock.json ./
 
 EXPOSE 3001
 
