@@ -89,7 +89,12 @@ botCache.tasks.set(`botlists`, {
               `Update bot lists: [${list.name}] ${totalGuilds} Guilds | ${totalUsers} Users`,
             )
           } else {
-            console.error(`Unable to update bot list for ${list.name}`)
+            console.error(
+              `Unable to update bot list`,
+              res.url,
+              res.status,
+              res.statusText,
+            )
           }
         })
         .catch((err) => {
