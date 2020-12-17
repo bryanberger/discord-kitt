@@ -76,8 +76,13 @@ async function init() {
       ['fun', 'Fun commands'],
       ['owner', 'Owner commands'],
     ])
-    // Registers all built-in groups, commands, and argument types
-    .registerDefaults()
+    // Registers all built-in argument types, groups, commands
+    .registerDefaultTypes()
+    .registerDefaultGroups()
+    .registerDefaultCommands({
+      unknownCommand: false,
+    })
+
     // Register custom commands
     .registerCommandsIn(path.join(__dirname, 'commands/announce'))
     .registerCommandsIn(path.join(__dirname, 'commands/fun'))
