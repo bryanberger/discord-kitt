@@ -1,7 +1,7 @@
 import { GuildMember, Message } from 'discord.js'
 import { Command, CommandoClient, CommandoMessage } from 'discord.js-commando'
 import { setPhraseForMember } from '../../lib/database'
-import { MIN_CHARS, MAX_CHARS, PHRASE_TYPES, WAIT } from '../../lib/constants'
+import { MIN_CHARS, MAX_CHARS, PHRASE_TYPES } from '../../lib/constants'
 import { removeWords } from '../../lib/utils'
 
 export interface PhraseCommandArgs {
@@ -30,6 +30,7 @@ export class PhraseCommand extends Command {
         duration: 10,
       },
       guildOnly: true,
+      argsPromptLimit: 0,
       args: [
         {
           key: 'type',
@@ -37,14 +38,12 @@ export class PhraseCommand extends Command {
           error: `Pick one: join or leave`,
           type: 'string',
           oneOf: ['join', 'leave'],
-          wait: WAIT,
         },
         {
           key: 'member',
           prompt: 'Which member would you like to set a phrase for',
           type: 'member',
           default: '',
-          wait: WAIT,
           validate: () => {
             // we validate in the run function
             return true
@@ -57,7 +56,6 @@ export class PhraseCommand extends Command {
           type: 'string',
           min: MIN_CHARS,
           max: MAX_CHARS,
-          wait: WAIT,
         },
       ],
     })

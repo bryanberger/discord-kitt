@@ -1,6 +1,6 @@
 import { Message } from 'discord.js'
 import { Command, CommandoClient, CommandoMessage } from 'discord.js-commando'
-import { EVENTS, EventsType, WAIT } from '../../lib/constants'
+import { EVENTS, EventsType } from '../../lib/constants'
 
 export interface CommandArgs {
   event: EventsType
@@ -28,13 +28,13 @@ export class DisableEventCommand extends Command {
         'disable-event stream',
         'disable-event bots',
       ],
+      argsPromptLimit: 0,
       args: [
         {
           key: 'event',
           prompt: 'Which event would you like to disable?',
           type: 'string',
           oneOf: EVENTS,
-          wait: WAIT,
         },
       ],
     })

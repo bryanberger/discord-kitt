@@ -32,6 +32,7 @@ export class DefaultCommand extends Command {
         duration: 10,
       },
       guildOnly: true,
+      argsPromptLimit: 0,
       args: [
         {
           key: 'type',
