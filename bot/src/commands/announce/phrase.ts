@@ -1,11 +1,8 @@
 import { GuildMember, Message } from 'discord.js'
 import { Command, CommandoClient, CommandoMessage } from 'discord.js-commando'
 import { setPhraseForMember } from '../../lib/database'
-import {
-  MIN_CHARS,
-  MAX_CHARS,
-  WAIT
-} from '../../lib/constants'
+import { MIN_CHARS, MAX_CHARS, PHRASE_TYPES, WAIT } from '../../lib/constants'
+import { removeWords } from '../../lib/utils'
 
 export interface PhraseCommandArgs {
   type: 'join' | 'leave'
@@ -84,22 +81,30 @@ export class PhraseCommand extends Command {
     message: CommandoMessage,
     args: PhraseCommandArgs,
   ): Promise<Message | Message[] | null> {
-    const member = args.member !== null ? args.member : message.member
+    const member = args.member === null ? message.member : args.member
 
-    if (args.type === 'join') {
+    // Kludge: allows the support of an optional `member` argument
+    const phrase =
+      args.member === null
+        ? removeWords(message.argString, PHRASE_TYPES).trim() // need to access the raw arguments
+        : args.phrase
+
+    const argType = args.type.toLowerCase()
+
+    if (argType === 'join') {
       await setPhraseForMember({
         type: 'join',
         guildId: message.guild.id,
         memberId: member.id,
-        message: args.phrase,
+        message: phrase,
       })
       return message.reply(`join phrase for ${member.displayName} was edited.`)
-    } else if (args.type === 'leave') {
+    } else if (argType === 'leave') {
       await setPhraseForMember({
         type: 'leave',
         guildId: message.guild.id,
         memberId: member.id,
-        message: args.phrase,
+        message: phrase,
       })
       return message.reply(`leave phrase for ${member.displayName} was edited.`)
     }
