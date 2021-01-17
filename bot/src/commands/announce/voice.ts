@@ -17,6 +17,7 @@ export class VoiceCommand extends Command {
         duration: 5,
       },
       guildOnly: true,
+      argsPromptLimit: 0,
       args: [
         {
           key: 'id',

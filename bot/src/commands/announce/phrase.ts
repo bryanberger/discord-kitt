@@ -1,11 +1,8 @@
 import { GuildMember, Message } from 'discord.js'
 import { Command, CommandoClient, CommandoMessage } from 'discord.js-commando'
 import { setPhraseForMember } from '../../lib/database'
-import {
-  MIN_CHARS,
-  MAX_CHARS,
-  WAIT
-} from '../../lib/constants'
+import { MIN_CHARS, MAX_CHARS, PHRASE_TYPES } from '../../lib/constants'
+import { removeWords } from '../../lib/utils'
 
 export interface PhraseCommandArgs {
   type: 'join' | 'leave'
@@ -33,6 +30,13 @@ export class PhraseCommand extends Command {
         duration: 10,
       },
       guildOnly: true,
+      argsPromptLimit: 0,
+      examples: [
+        'phrase join has joined the channel',
+        'phrase leave has left the channel',
+        'phrase @member join has joined the channel',
+        'phrase @member leave has left the channel',
+      ],
       args: [
         {
           key: 'type',
@@ -40,14 +44,12 @@ export class PhraseCommand extends Command {
           error: `Pick one: join or leave`,
           type: 'string',
           oneOf: ['join', 'leave'],
-          wait: WAIT,
         },
         {
           key: 'member',
           prompt: 'Which member would you like to set a phrase for',
           type: 'member',
           default: '',
-          wait: WAIT,
           validate: () => {
             // we validate in the run function
             return true
@@ -60,7 +62,6 @@ export class PhraseCommand extends Command {
           type: 'string',
           min: MIN_CHARS,
           max: MAX_CHARS,
-          wait: WAIT,
         },
       ],
     })
@@ -84,22 +85,30 @@ export class PhraseCommand extends Command {
     message: CommandoMessage,
     args: PhraseCommandArgs,
   ): Promise<Message | Message[] | null> {
-    const member = args.member !== null ? args.member : message.member
+    const argType = args.type.toLowerCase()
 
-    if (args.type === 'join') {
+    const member = args.member === null ? message.member : args.member
+
+    // Kludge: allows the support of an optional `member` argument
+    const phrase =
+      args.member === null
+        ? removeWords(message.argString.trim(), [argType]).trim() // need to access the raw arguments
+        : args.phrase
+
+    if (argType === 'join') {
       await setPhraseForMember({
         type: 'join',
         guildId: message.guild.id,
         memberId: member.id,
-        message: args.phrase,
+        message: phrase,
       })
       return message.reply(`join phrase for ${member.displayName} was edited.`)
-    } else if (args.type === 'leave') {
+    } else if (argType === 'leave') {
       await setPhraseForMember({
         type: 'leave',
         guildId: message.guild.id,
         memberId: member.id,
-        message: args.phrase,
+        message: phrase,
       })
       return message.reply(`leave phrase for ${member.displayName} was edited.`)
     }

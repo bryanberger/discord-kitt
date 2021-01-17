@@ -18,6 +18,7 @@ export class SayCommand extends Command {
       },
       clientPermissions: ['CONNECT', 'SPEAK'],
       guildOnly: true,
+      argsPromptLimit: 0,
       args: [
         {
           key: 'phrase',

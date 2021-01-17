@@ -47,3 +47,10 @@ export async function importDirectory(path: string) {
     await require(currentPath)
   }
 }
+
+export const removeWords = (str: string, arr: string[]) => {
+  return arr.reduce((acc, val) => {
+    const regex = new RegExp(`${val}`, 'i')
+    return acc.replace(regex, '')
+  }, str)
+}
