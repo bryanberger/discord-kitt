@@ -31,6 +31,12 @@ export class PhraseCommand extends Command {
       },
       guildOnly: true,
       argsPromptLimit: 0,
+      examples: [
+        'phrase join has joined the channel',
+        'phrase leave has left the channel',
+        'phrase @member join has joined the channel',
+        'phrase @member leave has left the channel',
+      ],
       args: [
         {
           key: 'type',
