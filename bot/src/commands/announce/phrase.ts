@@ -79,15 +79,15 @@ export class PhraseCommand extends Command {
     message: CommandoMessage,
     args: PhraseCommandArgs,
   ): Promise<Message | Message[] | null> {
+    const argType = args.type.toLowerCase()
+
     const member = args.member === null ? message.member : args.member
 
     // Kludge: allows the support of an optional `member` argument
     const phrase =
       args.member === null
-        ? removeWords(message.argString, PHRASE_TYPES).trim() // need to access the raw arguments
+        ? removeWords(message.argString.trim(), [argType]).trim() // need to access the raw arguments
         : args.phrase
-
-    const argType = args.type.toLowerCase()
 
     if (argType === 'join') {
       await setPhraseForMember({

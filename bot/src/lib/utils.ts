@@ -50,7 +50,7 @@ export async function importDirectory(path: string) {
 
 export const removeWords = (str: string, arr: string[]) => {
   return arr.reduce((acc, val) => {
-    const regex = new RegExp(` ${val}`, 'ig')
+    const regex = new RegExp(`${val}`, 'i')
     return acc.replace(regex, '')
   }, str)
 }
