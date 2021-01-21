@@ -10,7 +10,11 @@
  * - Sharding, when we need it https://discordjs.guide/sharding/
  */
 import path from 'path'
-import { CommandoClient, SyncSQLiteProvider } from 'discord.js-commando'
+import {
+  CommandoClient,
+  CommandoGuild,
+  SyncSQLiteProvider,
+} from 'discord.js-commando'
 import sqlite3 from 'better-sqlite3'
 import { Collection } from 'discord.js'
 
@@ -101,8 +105,8 @@ async function init() {
     .on('voiceStateUpdate', (oldState, newState) =>
       voiceStateUpdate(oldState, newState, client),
     )
-    .on('guildCreate', (guild) => guildCreate(guild, client))
-    .on('guildDelete', (guild) => guildDelete(guild, client))
+    .on('guildCreate', (guild) => guildCreate(guild as CommandoGuild, client))
+    .on('guildDelete', (guild) => guildDelete(guild as CommandoGuild, client))
 
   client.login(process.env.DISCORD_TOKEN)
 }

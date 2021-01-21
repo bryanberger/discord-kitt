@@ -32,17 +32,25 @@ export class ListCommand extends Command {
 
     let joinOutput = ''
     for (const [key, value] of Object.entries(joins)) {
-      const member = await message.guild.members.fetch(key)
-      if (member) {
-        joinOutput += `**${member.displayName}**: ${value}\n`
+      try {
+        const member = await message.guild.members.fetch(key)
+        if (member) {
+          joinOutput += `**${member.displayName}**: ${value}\n`
+        }
+      } catch (err) {
+        // Unknown Member
       }
     }
 
     let leaveOutput = ''
     for (const [key, value] of Object.entries(leaves)) {
-      const member = await message.guild.members.fetch(key)
-      if (member) {
-        leaveOutput += `**${member.displayName}**: ${value}\n`
+      try {
+        const member = await message.guild.members.fetch(key)
+        if (member) {
+          leaveOutput += `**${member.displayName}**: ${value}\n`
+        }
+      } catch (err) {
+        // Unknown Member
       }
     }
 
