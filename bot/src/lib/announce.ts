@@ -14,10 +14,11 @@ export const say = async (
   voiceConnection: VoiceConnection,
   text: string,
   voiceId: VoiceId,
+  speed: number,
 ) => {
   if (voiceConnection) {
     try {
-      const stream = await synth(text, voiceId)
+      const stream = await synth(text, voiceId, speed)
       await play(voiceConnection, stream)
       const count: number = (await announcements.get('count')) || 0
       await announcements.set('count', count + 1)

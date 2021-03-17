@@ -54,3 +54,18 @@ export const removeWords = (str: string, arr: string[]) => {
     return acc.replace(regex, '')
   }, str)
 }
+
+export const encodeStringForSSML = (str: string) => {
+  const controlCharacters: { [name: string]: string } = {
+    '&': '&amp;',
+    '"': '&quot;',
+    "'": '&apos;',
+    '<': '&lt;',
+    '>': '&gt;',
+  }
+  const xmlEncodedSSML = str.replace(
+    /[&|"|'|<|>]/g,
+    (char) => controlCharacters[char] || '',
+  )
+  return xmlEncodedSSML
+}

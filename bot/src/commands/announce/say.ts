@@ -1,7 +1,7 @@
 import { Message } from 'discord.js'
 import { Command, CommandoClient, CommandoMessage } from 'discord.js-commando'
 import { say } from '../../lib/announce'
-import { DEFAULT_VOICE_ID, MAX_CHARS } from '../../lib/constants'
+import { DEFAULT_SPEED, DEFAULT_VOICE_ID, MAX_CHARS } from '../../lib/constants'
 
 const MIN_CHARS = 2
 
@@ -48,6 +48,10 @@ export class SayCommand extends Command {
         'voiceId',
         DEFAULT_VOICE_ID,
       )
+      const guildSpeed = message.guild.settings.get(
+        'speed',
+        DEFAULT_SPEED,
+      )
 
       if (!voiceConnection) {
         return message.say(`You must be in the same voice channel as the bot.`)
@@ -56,7 +60,7 @@ export class SayCommand extends Command {
       message.delete().catch()
 
       // announce
-      await say(voiceConnection, args.phrase.trim(), guildVoiceId)
+      await say(voiceConnection, args.phrase.trim(), guildVoiceId, guildSpeed)
     } catch (err) {
       console.error(err)
     }

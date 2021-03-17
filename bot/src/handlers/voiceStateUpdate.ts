@@ -8,6 +8,7 @@ import {
   DEFAULT_EVENTS,
   DEFAULT_JOIN_MESSAGE,
   DEFAULT_LEAVE_MESSAGE,
+  DEFAULT_SPEED,
   DEFAULT_VOICE_ID,
 } from '../lib/constants'
 import { isBotInChannel } from '../lib/utils'
@@ -25,6 +26,7 @@ export default async (
     'voiceId',
     DEFAULT_VOICE_ID,
   )
+  const guildSpeed = client.provider.get(newState.guild.id, 'speed', DEFAULT_SPEED)
   const announceJoin = client.provider.get(newState.guild.id, 'join', DEFAULT_EVENTS.join)
   const announceLeave = client.provider.get(newState.guild.id, 'leave', DEFAULT_EVENTS.leave)
   const announceBots = client.provider.get(newState.guild.id, 'bots', DEFAULT_EVENTS.bots)
@@ -96,7 +98,7 @@ export default async (
     }
 
     if (message !== null) {
-      return await say(connection, `${username} ${message}`, guildVoiceId)
+      return await say(connection, `${username} ${message}`, guildVoiceId, guildSpeed)
     }
 
     return
@@ -144,6 +146,6 @@ export default async (
   }
 
   if (message !== null) {
-    return await say(connection, `${username} ${message}`, guildVoiceId)
+    return await say(connection, `${username} ${message}`, guildVoiceId, guildSpeed)
   }
 }
