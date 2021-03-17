@@ -50,8 +50,6 @@ export class SpeedCommand extends Command {
     message: CommandoMessage,
     args: SpeedPhraseArgs,
   ): Promise<Message | Message[] | null> {
-    console.log(args)
-
     message.guild.settings.set('speed', args.speed)
     return message.reply(`The default voice \`speed\` was changed.`)
   }
