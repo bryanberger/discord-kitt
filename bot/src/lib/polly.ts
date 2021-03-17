@@ -2,7 +2,8 @@ import AWS, { AWSError } from 'aws-sdk'
 import Discord from 'discord.js'
 import { SynthesizeSpeechInput, VoiceId } from 'aws-sdk/clients/polly'
 import { PassThrough, Stream } from 'stream'
-import { DEFAULT_VOICE_ID, LEXICONS } from './constants'
+import { DEFAULT_SPEED, DEFAULT_VOICE_ID, LEXICONS } from './constants'
+import { encodeStringForSSML } from './utils'
 
 // Create an Polly client
 const Polly = new AWS.Polly({
@@ -19,13 +20,20 @@ export let numVoices = 0
 export const synth = (
   text: string,
   voiceId?: VoiceId,
+  speed?: number,
 ): Promise<PassThrough> => {
+  const safeSsmlText = encodeStringForSSML(text)
+  const ssmlText = `<speak><prosody rate="${
+    speed || DEFAULT_SPEED
+  }%">${safeSsmlText}</prosody></speak>`
+
   const params: SynthesizeSpeechInput = {
-    Text: text,
+    Text: ssmlText,
     Engine: 'standard',
     OutputFormat: 'mp3',
     LexiconNames: LEXICONS,
     VoiceId: voiceId ?? DEFAULT_VOICE_ID,
+    TextType: 'ssml',
   }
 
   return new Promise((resolve, reject) => {
@@ -66,7 +74,7 @@ export const loadAndCacheVoices = () => {
     for (let i = 0; i < numVoices; i++) {
       const voice = data.Voices[i]
       const key = voice.LanguageCode
-     
+
       if (voices.has(key)) {
         voices.get(key).push(voice)
       } else {

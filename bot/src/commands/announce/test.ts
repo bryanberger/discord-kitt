@@ -1,7 +1,7 @@
 import { Message } from 'discord.js'
 import { Command, CommandoClient, CommandoMessage } from 'discord.js-commando'
 import { say } from '../../lib/announce'
-import { DEFAULT_VOICE_ID } from '../../lib/constants'
+import { DEFAULT_SPEED, DEFAULT_VOICE_ID } from '../../lib/constants'
 
 export class TestCommand extends Command {
   public constructor(client: CommandoClient) {
@@ -33,6 +33,10 @@ export class TestCommand extends Command {
         'voiceId',
         DEFAULT_VOICE_ID,
       )
+      const guildSpeed = message.guild.settings.get(
+        'speed',
+        DEFAULT_SPEED,
+      )
 
       if (!voiceConnection) {
         return message.say(
@@ -45,6 +49,7 @@ export class TestCommand extends Command {
         voiceConnection,
         `Hello, I'm one of the voices you can use for this bot. When I announce a phrase, I will sound like this.`,
         guildVoiceId,
+        guildSpeed
       )
     } catch (err) {
       console.error(err)
