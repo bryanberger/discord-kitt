@@ -30,7 +30,7 @@ export class SpeedCommand extends Command {
       args: [
         {
           key: 'speed',
-          prompt: 'What would you like to set the speed to? (eg: 0-200)',
+          prompt: 'What would you like to set the speed to? (eg: 1-200)',
           type: 'integer',
           min: 1,
           max: 200,
