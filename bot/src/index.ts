@@ -29,6 +29,7 @@ import startMetricServer from './server'
 import { Task } from './types/task'
 
 process.on('unhandledRejection', console.error)
+process.on('uncaughtException', console.error)
 
 // Client
 export const client = new CommandoClient({
@@ -100,13 +101,16 @@ async function init() {
   client
     .on('error', console.error)
     .on('warn', console.warn)
-    .on('debug', console.log)
     .on('ready', () => ready(client))
     .on('voiceStateUpdate', (oldState, newState) =>
       voiceStateUpdate(oldState, newState, client),
     )
     .on('guildCreate', (guild) => guildCreate(guild as CommandoGuild, client))
     .on('guildDelete', (guild) => guildDelete(guild as CommandoGuild, client))
+
+  if (process.env.NODE_ENV === 'development') {
+    client.on('debug', console.log)
+  }
 
   client.login(process.env.DISCORD_TOKEN)
 }
