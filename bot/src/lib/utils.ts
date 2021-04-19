@@ -19,7 +19,13 @@ export const isBotInChannel = (
   connections: Collection<string, VoiceConnection>,
   channel: VoiceChannel,
 ) => {
-  return connections.some((connection) => connection.channel.id === channel.id)
+  try {
+    return connections.some(
+      (connection) => connection.channel.id === channel.id,
+    )
+  } catch (err) {
+    return false
+  }
 }
 
 export const setDefaultAnnnouncementSettings = (
