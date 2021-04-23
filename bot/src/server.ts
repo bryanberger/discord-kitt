@@ -12,7 +12,7 @@ export default () => {
   app.get('/metrics', async (_, res) => {
     try {
       res.set('Content-Type', register.contentType)
-      res.end(register.metrics())
+      res.end(await register.metrics())
     } catch (err) {
       res.status(500).end(err)
     }
