@@ -41,10 +41,6 @@ export default async (
 
     if (!oldState.channel && newState.channel) {
       console.log('bot join')
-      // join, discord api does this already, but it seems to need it
-      // await sleep(1000)
-      await play(connection, new Silence(), { type: 'opus' })
-      connection.setSpeaking(0)
       await channels.set(newState.channel.id, true)
     } else if (!newState.channel) {
       console.log('bot leave')

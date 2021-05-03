@@ -23,13 +23,17 @@ import guildCreate from './handlers/guildCreate'
 import guildDelete from './handlers/guildDelete'
 import ready from './handlers/ready'
 import { loadAndCacheVoices } from './lib/polly'
-import { importDirectory } from './lib/utils'
+import { importDirectory, shutdown } from './lib/utils'
 import ensureDirectories from './scripts/directories'
 import startMetricServer from './server'
 import { Task } from './types/task'
 
 process.on('unhandledRejection', console.error)
-process.on('uncaughtException', console.error)
+process.on('uncaughtException', (e) => {
+  console.log(e, 'uncaughtException')
+  // try to force restart the process
+  shutdown(client)
+})
 
 // Client
 export const client = new CommandoClient({

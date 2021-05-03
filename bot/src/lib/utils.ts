@@ -1,12 +1,22 @@
 import fs from 'fs-extra'
-import { Collection, VoiceChannel, VoiceConnection } from 'discord.js'
+import {
+  Client,
+  Collection,
+  Guild,
+  VoiceChannel,
+  VoiceConnection,
+} from 'discord.js'
 import { CommandoClient, CommandoGuild } from 'discord.js-commando'
 
 import { DEFAULT_EVENTS, EVENTS } from './constants'
-import { guilds } from './database'
+import { channels, guilds } from './database'
 
 export const sleep = (ms: number): Promise<void> => {
   return new Promise((resolve) => setTimeout(resolve, ms))
+}
+
+export const rand = (min: number, max: number) => {
+  return Math.floor(Math.random() * max) + min
 }
 
 export const setActivity = async (client: CommandoClient) => {
@@ -28,7 +38,7 @@ export const isBotInChannel = (
   }
 }
 
-export const setDefaultAnnnouncementSettings = (
+export const setDefaultAnnouncementSettings = (
   client: CommandoClient,
   guild: CommandoGuild,
 ) => {
@@ -74,4 +84,43 @@ export const encodeStringForSSML = (str: string) => {
     (char) => controlCharacters[char] || '',
   )
   return xmlEncodedSSML
+}
+
+export const shutdown = (client: Client) => {
+  try {
+    client.voice?.connections?.forEach((connection) => {
+      connection.disconnect()
+    })
+    client.destroy()
+    process.exit(1)
+  } catch (err) {}
+}
+
+export const getCachedVoiceChannels = async (
+  guilds: Collection<string, Guild>,
+) => {
+  return await Promise.all(
+    guilds.map(async (guild) => {
+      const voiceChannels = guild.channels.cache.filter(
+        (channel) => channel.type === 'voice',
+      )
+
+      /* 
+        KLUDGE: lookup each channel in the cache to see if its there,
+        this should be replaced when we switch databases
+        store an array of cached channels instead of a lookup.
+      */
+      const channelCache: boolean[] = await Promise.all(
+        voiceChannels.map(async (channel) => {
+          return await channels.get(channel.id)
+        }),
+      )
+
+      const voiceChannelsArray = [...voiceChannels.values()]
+
+      return voiceChannelsArray.filter(
+        (_, index) => channelCache[index],
+      ) as VoiceChannel[]
+    }),
+  ).then((channels) => channels.reduce((acc, val) => acc.concat(val), [])) // flat()
 }
