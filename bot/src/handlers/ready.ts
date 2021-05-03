@@ -21,7 +21,9 @@ export default async (client: CommandoClient) => {
   )
 
   // Rejoin cached channels
-  const cachedChannels = await getCachedVoiceChannels(client.guilds.cache)
+  const cachedChannels = [...await getCachedVoiceChannels(client.guilds.cache)]
+
+  console.log(`Trying to rejoin [${cachedChannels.length}] cached channels.`)
 
   tryToJoinCachedChannels(cachedChannels)
 
