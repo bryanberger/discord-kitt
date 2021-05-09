@@ -63,6 +63,7 @@ export const botCache = {
 // top level await
 async function init() {
   console.log('NODE_ENV', process.env.NODE_ENV)
+  console.log('DEBUG', process.env.DEBUG)
   ensureDirectories()
   loadAndCacheVoices()
   startMetricServer()
@@ -112,7 +113,7 @@ async function init() {
     .on('guildCreate', (guild) => guildCreate(guild as CommandoGuild, client))
     .on('guildDelete', (guild) => guildDelete(guild as CommandoGuild, client))
 
-  if (process.env.NODE_ENV === 'development') {
+  if (process.env.DEBUG && process.env.DEBUG === 'true') {
     client.on('debug', (message) => {
       // Ignore spammy messages
       if (/(Sending a heartbeat|Latency of)/i.test(message)) return null

@@ -43,7 +43,7 @@ services:
       args:
         REDIS_URL: ${REDIS_URL}
         NODE_ENV: ${NODE_ENV}
-    command: npm run start:dev
+    command: npm run start
     depends_on:
       - redis
       - prometheus
@@ -54,19 +54,8 @@ services:
       - ./bot:/usr/src/app
       - ./settings:/usr/src/app/settings
       - /usr/src/app/node_modules
-    environment:
-      DISCORD_TOKEN: ${DISCORD_TOKEN}
-      OWNER_ID: ${OWNER_ID}
-      BOT_ID: ${BOT_ID}
-      AWS_ACCESS_KEY_ID: ${AWS_ACCESS_KEY_ID}
-      AWS_SECRET_ACCESS_KEY: ${AWS_SECRET_ACCESS_KEY}
-      AWS_DEFAULT_REGION: ${AWS_DEFAULT_REGION}
-      REDIS_URL: ${REDIS_URL}
-      NODE_ENV: ${NODE_ENV}
-      DEBUG: ${DEBUG}
-      TOP_GG: ${TOP_GG}
-      DISCORD_BOTS_GG: ${DISCORD_BOTS_GG}
-      DISCORD_BOT_LIST: ${DISCORD_BOT_LIST}
+    env_file: 
+      - .env
 
 volumes:
   prometheus_data:
