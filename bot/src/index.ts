@@ -113,7 +113,14 @@ async function init() {
     .on('guildDelete', (guild) => guildDelete(guild as CommandoGuild, client))
 
   if (process.env.NODE_ENV === 'development') {
-    client.on('debug', console.log)
+    client.on('debug', (message) => {
+      // Ignore spammy messages
+      if (/(Sending a heartbeat|Latency of)/i.test(message)) return null
+      if (/voice/i.test(message)) return null
+
+      const timestamp = new Date().toISOString()
+      console.log(`[${timestamp}] ${message}`)
+    })
   }
 
   client.login(process.env.DISCORD_TOKEN)

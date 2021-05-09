@@ -41,6 +41,9 @@ export default async (
 
     if (!oldState.channel && newState.channel) {
       console.log('bot join')
+      // KLUDGE: needed, otherwise green ring doesn't go away on join...
+      await play(connection, new Silence(), { type: 'opus' })
+      connection.setSpeaking(0)
       await channels.set(newState.channel.id, true)
     } else if (!newState.channel) {
       console.log('bot leave')
