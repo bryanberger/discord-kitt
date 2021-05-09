@@ -3,14 +3,15 @@ export const DEFAULT_LEAVE_MESSAGE = 'has left the channel'
 export const DEFAULT_VOICE_ID = 'Amy'
 export const DEFAULT_SPEED = 100
 export const PHRASE_TYPES = ['join', 'leave']
-export const EVENTS = ['join', 'leave', 'mute', 'stream', 'bots']
-export type EventsType = 'join' | 'leave' | 'mute' | 'stream' | 'bots'
+export const EVENTS = ['join', 'leave', 'mute', 'stream', 'bots', 'nicknames']
+export type EventsType = 'join' | 'leave' | 'mute' | 'stream' | 'bots' | 'nicknames'
 export const DEFAULT_EVENTS = {
   'join': true,
   'leave': true,
   'mute': false,
   'stream': false,
   'bots': true,
+  'nicknames': true,
 }
 export const MIN_CHARS = 5
 export const MAX_CHARS = 140

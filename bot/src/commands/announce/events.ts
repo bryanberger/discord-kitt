@@ -37,7 +37,7 @@ export class EventsCommand extends Command {
     const embed = new MessageEmbed()
       .setTitle(`**Events**`)
       .setDescription(
-        `List the state of all announcement events Eg: when someone joins, leaves, mutes, starts a stream, or to ignore bots.`,
+        `The state of all announcement events\n eg: when someone joins, leaves, mutes, starts a stream, or to whether to ignore bots or nicknames.`,
       )
       .setColor(`#35e07c`)
 

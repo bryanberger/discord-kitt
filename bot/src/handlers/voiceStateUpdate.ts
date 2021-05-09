@@ -26,12 +26,24 @@ export default async (
     'voiceId',
     DEFAULT_VOICE_ID,
   )
-  const guildSpeed = client.provider.get(newState.guild.id, 'speed', DEFAULT_SPEED)
-  const announceJoin = client.provider.get(newState.guild.id, 'join', DEFAULT_EVENTS.join)
-  const announceLeave = client.provider.get(newState.guild.id, 'leave', DEFAULT_EVENTS.leave)
-  const announceBots = client.provider.get(newState.guild.id, 'bots', DEFAULT_EVENTS.bots)
-  const announceMute = client.provider.get(newState.guild.id, 'mute', DEFAULT_EVENTS.mute)
-  const announceStream = client.provider.get(newState.guild.id, 'stream', DEFAULT_EVENTS.stream)
+  const defaultJoin: string = client.provider.get(
+    newState.guild.id,
+    'defaultJoin',
+    DEFAULT_JOIN_MESSAGE,
+  )
+
+  const defaultLeave: string = client.provider.get(
+    newState.guild.id,
+    'defaultLeave',
+    DEFAULT_LEAVE_MESSAGE,
+  )
+  const guildSpeed = client.provider.get(newState.guild.id, 'speed', DEFAULT_SPEED) as number
+  const announceJoin = client.provider.get(newState.guild.id, 'join', DEFAULT_EVENTS.join) as boolean
+  const announceLeave = client.provider.get(newState.guild.id, 'leave', DEFAULT_EVENTS.leave) as boolean
+  const announceBots = client.provider.get(newState.guild.id, 'bots', DEFAULT_EVENTS.bots) as boolean
+  const announceMute = client.provider.get(newState.guild.id, 'mute', DEFAULT_EVENTS.mute) as boolean
+  const announceStream = client.provider.get(newState.guild.id, 'stream', DEFAULT_EVENTS.stream) as boolean
+  const announceNicknames = client.provider.get(newState.guild.id, 'nicknames', DEFAULT_EVENTS.nicknames) as boolean
 
   let message: string = null
 
@@ -119,12 +131,7 @@ export default async (
         guildId: newState.guild.id,
         memberId: newState.member.id,
         type: 'join',
-      })) ??
-      client.provider.get(
-        newState.guild.id,
-        'defaultJoin',
-        DEFAULT_JOIN_MESSAGE,
-      )
+      })) ?? defaultJoin
   } else if (
     announceLeave &&
     oldState.channel &&
@@ -136,15 +143,22 @@ export default async (
         guildId: oldState.guild.id,
         memberId: oldState.member.id,
         type: 'leave',
-      })) ??
-      client.provider.get(
-        newState.guild.id,
-        'defaultLeave',
-        DEFAULT_LEAVE_MESSAGE,
-      )
+      })) ?? defaultLeave
   }
 
   if (message !== null) {
-    return await say(connection, `${username} ${message}`, guildVoiceId, guildSpeed)
+    let nicks = announceNicknames
+
+    // If the message is still a default, then force-announce the nickname otherwise you won't know who it belongs to.
+    if (message === defaultJoin || message === defaultLeave) {
+      nicks = true
+    }
+
+    return await say(
+      connection,
+      `${nicks ? username : ''} ${message}`,
+      guildVoiceId,
+      guildSpeed,
+    )
   }
 }

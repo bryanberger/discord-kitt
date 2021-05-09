@@ -12,7 +12,7 @@
     "build": "tsc",
     "clean": "rimraf dist",
     "start": "node --trace-warnings dist/index.js",
-    "start:dev": "nodemon --config nodemon.json",
+    "start:dev": "node --trace-warnings --inspect-brk=0.0.0.0 dist/index.js",
     "prune": "npm prune --production"
   },
   "dependencies": {
