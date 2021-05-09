@@ -1,21 +1,20 @@
 import { Command, CommandoClient, CommandoMessage } from 'discord.js-commando'
-import { shutdown } from '../../lib/utils'
 
-export class RestartCommand extends Command {
+export class LeaveGuildCommand extends Command {
   public constructor(client: CommandoClient) {
     super(client, {
-      name: 'restart',
+      name: 'leave-guild',
       group: 'owner',
-      memberName: 'restart',
-      description: 'Forces the bot process to restart',
+      memberName: 'leave-guild',
+      description: 'Causes the bot to leave the current guild',
       guarded: true,
       ownerOnly: true,
     })
   }
 
   public async run(message: CommandoMessage): Promise<null> {
-    await message.say('Restarting...')
-    shutdown(message.client)
+    await message.say(':wave:')
+    await message.guild.leave()
     return null
   }
 }

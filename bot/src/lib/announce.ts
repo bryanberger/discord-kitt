@@ -1,9 +1,4 @@
-import {
-  StreamDispatcher,
-  StreamOptions,
-  VoiceBroadcast,
-  VoiceConnection,
-} from 'discord.js'
+import { StreamOptions, VoiceBroadcast, VoiceConnection } from 'discord.js'
 
 import { synth } from './polly'
 import { Readable } from 'stream'
@@ -28,21 +23,15 @@ export const say = async (
   }
 }
 
-export const play = (
+export const play = async (
   voiceConnection: VoiceConnection,
   input: VoiceBroadcast | Readable | string,
   options?: StreamOptions,
-) => {
-  return new Promise((resolve, reject) => {
-    const dispatcher: StreamDispatcher = voiceConnection.play(input, options)
-    dispatcher.on('error', (err) => {
-      console.error(err)
-      reject(err)
-    })
-    dispatcher.on('finish', () => {
-      console.log('played synth')
-      dispatcher.destroy()
-      resolve(input)
-    })
-  })
+): Promise<void> => {
+  if (voiceConnection) {
+    voiceConnection.play(input, options)
+    return Promise.resolve()
+  } else {
+    return Promise.reject('Client is not connected to the voice channel')
+  }
 }

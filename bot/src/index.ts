@@ -23,13 +23,17 @@ import guildCreate from './handlers/guildCreate'
 import guildDelete from './handlers/guildDelete'
 import ready from './handlers/ready'
 import { loadAndCacheVoices } from './lib/polly'
-import { importDirectory } from './lib/utils'
+import { importDirectory, shutdown } from './lib/utils'
 import ensureDirectories from './scripts/directories'
 import startMetricServer from './server'
 import { Task } from './types/task'
 
 process.on('unhandledRejection', console.error)
-process.on('uncaughtException', console.error)
+process.on('uncaughtException', (e) => {
+  console.log(e, 'uncaughtException')
+  // try to force restart the process
+  shutdown(client)
+})
 
 // Client
 export const client = new CommandoClient({
@@ -59,6 +63,7 @@ export const botCache = {
 // top level await
 async function init() {
   console.log('NODE_ENV', process.env.NODE_ENV)
+  console.log('DEBUG', process.env.DEBUG)
   ensureDirectories()
   loadAndCacheVoices()
   startMetricServer()
@@ -108,8 +113,15 @@ async function init() {
     .on('guildCreate', (guild) => guildCreate(guild as CommandoGuild, client))
     .on('guildDelete', (guild) => guildDelete(guild as CommandoGuild, client))
 
-  if (process.env.NODE_ENV === 'development') {
-    client.on('debug', console.log)
+  if (process.env.DEBUG && process.env.DEBUG === 'true') {
+    client.on('debug', (message) => {
+      // Ignore spammy messages
+      if (/(Sending a heartbeat|Latency of)/i.test(message)) return null
+      if (/voice/i.test(message)) return null
+
+      const timestamp = new Date().toISOString()
+      console.log(`[${timestamp}] ${message}`)
+    })
   }
 
   client.login(process.env.DISCORD_TOKEN)

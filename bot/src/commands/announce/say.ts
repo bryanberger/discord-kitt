@@ -48,16 +48,17 @@ export class SayCommand extends Command {
         'voiceId',
         DEFAULT_VOICE_ID,
       )
-      const guildSpeed = message.guild.settings.get(
-        'speed',
-        DEFAULT_SPEED,
-      )
+      const guildSpeed = message.guild.settings.get('speed', DEFAULT_SPEED)
 
       if (!voiceConnection) {
         return message.say(`You must be in the same voice channel as the bot.`)
       }
       // remove the message from the text-channel
-      message.delete().catch()
+      try {
+        await message.delete()
+      } catch (err) {
+        console.error(`Error: Missing permission to delete this user's message`)
+      }
 
       // announce
       await say(voiceConnection, args.phrase.trim(), guildVoiceId, guildSpeed)
