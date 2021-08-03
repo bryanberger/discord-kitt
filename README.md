@@ -1,3 +1,6 @@
+[![Discord Bots](https://discordbots.org/api/widget/status/530825629793517590.svg?noavatar=true)](https://discordbots.org/bot/530825629793517590)
+[![Discord Chat](https://img.shields.io/discord/780563398026592268.svg)](https://discord.gg/8ZsAYZ8Smd)
+
 # Kitt: A Discord Bot
 
 A `docker` container that runs the `Kitt` Announcer Bot.
