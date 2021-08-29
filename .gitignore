@@ -9,3 +9,4 @@ dist
 cache
 settings.db
 settings
+__blobstorage__
