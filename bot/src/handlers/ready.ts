@@ -41,6 +41,8 @@ export default async (client: CommandoClient) => {
 }
 
 function tryToJoinCachedChannels(voiceChannels: VoiceChannel[]) {
+  if(voiceChannels.length === 0) return
+
   const channel = voiceChannels.shift()
 
   channel

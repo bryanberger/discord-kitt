@@ -88,7 +88,7 @@ export class ResetCommand extends Command {
           type: 'join',
           guildId: message.guild.id,
           memberId: member.id,
-          message: DEFAULT_JOIN_MESSAGE,
+          message: message.guild.settings.get("defaultJoin") ?? DEFAULT_JOIN_MESSAGE,
         })
         return message.reply(
           `join phrase for ${member.displayName} was reset to the server default.`,
@@ -98,7 +98,7 @@ export class ResetCommand extends Command {
           type: 'leave',
           guildId: message.guild.id,
           memberId: member.id,
-          message: DEFAULT_LEAVE_MESSAGE,
+          message: message.guild.settings.get("defaultLeave") ?? DEFAULT_LEAVE_MESSAGE,
         })
         return message.reply(
           `leave phrase for ${member.displayName} was reset to the server default.`,
