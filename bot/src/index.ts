@@ -41,7 +41,14 @@ export const client = new CommandoClient({
   owner: process.env.OWNER_ID,
   disableMentions: 'everyone',
   invite: 'https://discord.gg/8ZsAYZ8Smd',
-  shards: 'auto',
+  shards: 'auto', // tmp internal mem sharding
+  messageEditHistoryMaxSize: 0,
+  messageCacheMaxSize: 25,
+  messageCacheLifetime: 21600,
+  messageSweepInterval: 43200,
+  ws: {
+    intents: ['GUILDS', 'GUILD_MESSAGES', 'GUILD_VOICE_STATES', 'DIRECT_MESSAGES'],
+  },
 })
 
 // In Memory Bot Cache
