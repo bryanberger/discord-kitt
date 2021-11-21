@@ -55,6 +55,7 @@ services:
       - ./bot:/usr/src/app
       - ./settings:/usr/src/app/settings
       - /usr/src/app/node_modules
+    working_dir: /usr/src/app
     env_file: 
       - .env
 

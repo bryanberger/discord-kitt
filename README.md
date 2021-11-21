@@ -45,6 +45,8 @@ npm install
 docker-compose up
 ```
 
+if you add a new npm package, run `docker-compose up --build` to rebuild the container while testing
+
 ### Custom Lexicons
 
 Lexicons are XML/PLS files that describe pronunciation of specific words and phrases.

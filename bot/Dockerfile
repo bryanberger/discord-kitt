@@ -10,12 +10,12 @@ WORKDIR /build
 COPY --chown=node:node package.json package.json
 COPY --chown=node:node package-lock.json package-lock.json
 COPY --chown=node:node tsconfig.json tsconfig.json
+COPY --chown=node:node src/ src/
 
 USER node
 
 RUN npm ci
 
-COPY --chown=node:node src/ src/
 RUN npm run build
 
 RUN npm prune --production
