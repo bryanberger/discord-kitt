@@ -41,6 +41,7 @@ export const client = new CommandoClient({
   owner: process.env.OWNER_ID,
   disableMentions: 'everyone',
   invite: 'https://discord.gg/8ZsAYZ8Smd',
+  shards: 'auto',
 })
 
 // In Memory Bot Cache
