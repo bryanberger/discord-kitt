@@ -44,8 +44,8 @@ export const client = new CommandoClient({
   shards: 'auto', // tmp internal mem sharding
   messageEditHistoryMaxSize: 0,
   messageCacheMaxSize: 25,
-  messageCacheLifetime: 21600,
-  messageSweepInterval: 43200,
+  messageCacheLifetime: 1200, // 15m
+  messageSweepInterval: 3600, // 1hr
   ws: {
     intents: ['GUILDS', 'GUILD_MESSAGES', 'GUILD_VOICE_STATES', 'DIRECT_MESSAGES'],
   },
