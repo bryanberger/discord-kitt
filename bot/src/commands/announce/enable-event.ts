@@ -27,6 +27,7 @@ export class EnableEventCommand extends Command {
         'enable-event mute',
         'enable-event stream',
         'enable-event bots',
+        'enable-event nicknames',
       ],
       argsPromptLimit: 0,
       args: [
