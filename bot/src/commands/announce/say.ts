@@ -14,7 +14,7 @@ export class SayCommand extends Command {
       description: 'Says a phrase in the users current voice channel',
       throttling: {
         usages: 1,
-        duration: 5,
+        duration: 20,
       },
       clientPermissions: ['CONNECT', 'SPEAK'],
       guildOnly: true,
