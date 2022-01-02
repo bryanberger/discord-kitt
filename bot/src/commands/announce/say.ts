@@ -1,7 +1,7 @@
 import { Message } from 'discord.js'
 import { Command, CommandoClient, CommandoMessage } from 'discord.js-commando'
 import { say } from '../../lib/announce'
-import { DEFAULT_SAY_AUTODELETE, DEFAULT_SPEED, DEFAULT_VOICE_ID, MAX_CHARS, SAY_AUTO_DELETE } from '../../lib/constants'
+import { DEFAULT_SAY_AUTODELETE, DEFAULT_SPEED, DEFAULT_VOICE_ID, MAX_SAY_CHARS, SAY_AUTO_DELETE } from '../../lib/constants'
 
 const MIN_CHARS = 2
 
@@ -23,10 +23,10 @@ export class SayCommand extends Command {
         {
           key: 'phrase',
           prompt: 'What would you like the bot to say?',
-          error: `The min length is ${MIN_CHARS} characters, the max length is ${MAX_CHARS} characters.`,
+          error: `The min length is ${MIN_CHARS} characters, the max length is ${MAX_SAY_CHARS} characters.`,
           type: 'string',
           min: MIN_CHARS,
-          max: MAX_CHARS,
+          max: MAX_SAY_CHARS,
         },
       ],
     })

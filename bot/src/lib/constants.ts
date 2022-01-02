@@ -17,6 +17,7 @@ export const DEFAULT_EVENTS = {
 }
 export const MIN_CHARS = 5
 export const MAX_CHARS = 140
+export const MAX_SAY_CHARS = 100
 export const WAIT = 8
 export const LEXICONS = ['custom']
 export enum Time {
