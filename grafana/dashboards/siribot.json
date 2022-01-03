@@ -22,7 +22,7 @@
   "editable": true,
   "gnetId": 11159,
   "graphTooltip": 0,
-  "iteration": 1641175213078,
+  "iteration": 1641230309662,
   "links": [],
   "panels": [
     {
@@ -799,7 +799,6 @@
             }
           },
           "mappings": [],
-          "min": 0,
           "thresholds": {
             "mode": "absolute",
             "steps": [
@@ -842,7 +841,7 @@
       "targets": [
         {
           "exemplar": true,
-          "expr": "help_command_total",
+          "expr": "help_command_total > 0",
           "hide": false,
           "interval": "",
           "legendFormat": "help",
@@ -850,7 +849,7 @@
         },
         {
           "exemplar": true,
-          "expr": "prefix_command_total",
+          "expr": "prefix_command_total > 0",
           "hide": false,
           "interval": "",
           "legendFormat": "prefix",
@@ -858,7 +857,7 @@
         },
         {
           "exemplar": true,
-          "expr": "ping_command_total",
+          "expr": "ping_command_total > 0",
           "hide": false,
           "instant": false,
           "interval": "",
@@ -867,7 +866,7 @@
         },
         {
           "exemplar": true,
-          "expr": "eval_command_total",
+          "expr": "eval_command_total > 0",
           "hide": false,
           "interval": "",
           "legendFormat": "eval",
@@ -875,7 +874,7 @@
         },
         {
           "exemplar": true,
-          "expr": "groups_command_total",
+          "expr": "groups_command_total > 0",
           "hide": false,
           "interval": "",
           "legendFormat": "groups",
@@ -883,7 +882,7 @@
         },
         {
           "exemplar": true,
-          "expr": "enable_command_total",
+          "expr": "enable_command_total > 0",
           "hide": false,
           "interval": "",
           "legendFormat": "enable",
@@ -891,7 +890,7 @@
         },
         {
           "exemplar": true,
-          "expr": "reload_command_total",
+          "expr": "reload_command_total > 0",
           "hide": false,
           "interval": "",
           "legendFormat": "reload",
@@ -899,7 +898,7 @@
         },
         {
           "exemplar": true,
-          "expr": "load_command_total",
+          "expr": "load_command_total > 0",
           "hide": false,
           "interval": "",
           "legendFormat": "load",
@@ -907,7 +906,7 @@
         },
         {
           "exemplar": true,
-          "expr": "unload_command_total",
+          "expr": "unload_command_total > 0",
           "hide": false,
           "interval": "",
           "legendFormat": "unload",
@@ -915,7 +914,7 @@
         },
         {
           "exemplar": true,
-          "expr": "default_command_total",
+          "expr": "default_command_total > 0",
           "hide": false,
           "interval": "",
           "legendFormat": "default",
@@ -923,7 +922,7 @@
         },
         {
           "exemplar": true,
-          "expr": "disable_event_command_total",
+          "expr": "disable_event_command_total > 0",
           "hide": false,
           "interval": "",
           "legendFormat": "disable",
@@ -931,7 +930,7 @@
         },
         {
           "exemplar": true,
-          "expr": "enable_event_command_total",
+          "expr": "enable_event_command_total > 0",
           "hide": false,
           "interval": "",
           "legendFormat": "enable",
@@ -939,7 +938,7 @@
         },
         {
           "exemplar": true,
-          "expr": "events_command_total",
+          "expr": "events_command_total > 0",
           "hide": false,
           "interval": "",
           "legendFormat": "events",
@@ -947,7 +946,7 @@
         },
         {
           "exemplar": true,
-          "expr": "join_command_total",
+          "expr": "join_command_total > 0",
           "hide": false,
           "interval": "",
           "legendFormat": "join",
@@ -955,7 +954,7 @@
         },
         {
           "exemplar": true,
-          "expr": "leave_command_total",
+          "expr": "leave_command_total > 0",
           "hide": false,
           "interval": "",
           "legendFormat": "leave",
@@ -963,7 +962,7 @@
         },
         {
           "exemplar": true,
-          "expr": "list_command_total",
+          "expr": "list_command_total > 0",
           "hide": false,
           "interval": "",
           "legendFormat": "list",
@@ -971,7 +970,7 @@
         },
         {
           "exemplar": true,
-          "expr": "phrase_command_total",
+          "expr": "phrase_command_total > 0",
           "hide": false,
           "interval": "",
           "legendFormat": "phrase",
@@ -979,7 +978,7 @@
         },
         {
           "exemplar": true,
-          "expr": "rejoin_command_total",
+          "expr": "rejoin_command_total > 0",
           "hide": false,
           "interval": "",
           "legendFormat": "rejoin",
@@ -987,7 +986,7 @@
         },
         {
           "exemplar": true,
-          "expr": "reset_command_total",
+          "expr": "reset_command_total > 0",
           "hide": false,
           "interval": "",
           "legendFormat": "reset",
@@ -995,7 +994,7 @@
         },
         {
           "exemplar": true,
-          "expr": "say_auto_delete_command_total",
+          "expr": "say_auto_delete_command_total > 0",
           "hide": false,
           "interval": "",
           "legendFormat": "say auto delete",
@@ -1003,7 +1002,7 @@
         },
         {
           "exemplar": true,
-          "expr": "say_command_total",
+          "expr": "say_command_total > 0",
           "hide": false,
           "interval": "",
           "legendFormat": "say",
@@ -1011,7 +1010,7 @@
         },
         {
           "exemplar": true,
-          "expr": "speed_command_total",
+          "expr": "speed_command_total > 0",
           "hide": false,
           "interval": "",
           "legendFormat": "speed",
@@ -1019,7 +1018,7 @@
         },
         {
           "exemplar": true,
-          "expr": "test_command_total",
+          "expr": "test_command_total > 0",
           "hide": false,
           "interval": "",
           "legendFormat": "test",
@@ -1027,7 +1026,7 @@
         },
         {
           "exemplar": true,
-          "expr": "voice_command_total",
+          "expr": "voice_command_total > 0",
           "hide": false,
           "interval": "",
           "legendFormat": "voice",
@@ -1035,7 +1034,7 @@
         },
         {
           "exemplar": true,
-          "expr": "voices_command_total",
+          "expr": "voices_command_total > 0",
           "hide": false,
           "interval": "",
           "legendFormat": "voices",
@@ -1043,7 +1042,7 @@
         },
         {
           "exemplar": true,
-          "expr": "flip_command_total",
+          "expr": "flip_command_total > 0",
           "hide": false,
           "interval": "",
           "legendFormat": "flip",
@@ -1051,7 +1050,7 @@
         },
         {
           "exemplar": true,
-          "expr": "leave_guild_command_total",
+          "expr": "leave_guild_command_total > 0",
           "hide": false,
           "interval": "",
           "legendFormat": "leave guild",
@@ -1059,7 +1058,7 @@
         },
         {
           "exemplar": true,
-          "expr": "restart_command_total",
+          "expr": "restart_command_total > 0",
           "hide": false,
           "interval": "",
           "legendFormat": "restart",
@@ -1067,7 +1066,7 @@
         },
         {
           "exemplar": true,
-          "expr": "updatebotlists_command_total",
+          "expr": "updatebotlists_command_total > 0",
           "hide": false,
           "interval": "",
           "legendFormat": "update bot lists",
@@ -1075,7 +1074,7 @@
         },
         {
           "exemplar": true,
-          "expr": "uptime_command_total",
+          "expr": "uptime_command_total > 0",
           "hide": false,
           "interval": "",
           "legendFormat": "uptime",
@@ -1083,278 +1082,7 @@
         }
       ],
       "title": "Command Totals",
-      "transformations": [
-        {
-          "id": "filterByValue",
-          "options": {
-            "filters": [
-              {
-                "config": {
-                  "id": "equal",
-                  "options": {
-                    "value": 0
-                  }
-                },
-                "fieldName": "say"
-              },
-              {
-                "config": {
-                  "id": "equal",
-                  "options": {
-                    "value": 0
-                  }
-                },
-                "fieldName": "help"
-              },
-              {
-                "config": {
-                  "id": "equal",
-                  "options": {
-                    "value": 0
-                  }
-                },
-                "fieldName": "prefix"
-              },
-              {
-                "config": {
-                  "id": "equal",
-                  "options": {
-                    "value": 0
-                  }
-                },
-                "fieldName": "ping"
-              },
-              {
-                "config": {
-                  "id": "equal",
-                  "options": {
-                    "value": 0
-                  }
-                },
-                "fieldName": "eval"
-              },
-              {
-                "config": {
-                  "id": "equal",
-                  "options": {
-                    "value": 0
-                  }
-                },
-                "fieldName": "groups"
-              },
-              {
-                "config": {
-                  "id": "equal",
-                  "options": {
-                    "value": 0
-                  }
-                },
-                "fieldName": "enable"
-              },
-              {
-                "config": {
-                  "id": "equal",
-                  "options": {
-                    "value": 0
-                  }
-                },
-                "fieldName": "reload"
-              },
-              {
-                "config": {
-                  "id": "equal",
-                  "options": {
-                    "value": 0
-                  }
-                },
-                "fieldName": "load"
-              },
-              {
-                "config": {
-                  "id": "equal",
-                  "options": {
-                    "value": 0
-                  }
-                },
-                "fieldName": "unload"
-              },
-              {
-                "config": {
-                  "id": "equal",
-                  "options": {
-                    "value": 0
-                  }
-                },
-                "fieldName": "default"
-              },
-              {
-                "config": {
-                  "id": "equal",
-                  "options": {
-                    "value": 0
-                  }
-                },
-                "fieldName": "disable"
-              },
-              {
-                "config": {
-                  "id": "equal",
-                  "options": {
-                    "value": 0
-                  }
-                },
-                "fieldName": "events"
-              },
-              {
-                "config": {
-                  "id": "equal",
-                  "options": {
-                    "value": 0
-                  }
-                },
-                "fieldName": "join"
-              },
-              {
-                "config": {
-                  "id": "equal",
-                  "options": {
-                    "value": 0
-                  }
-                },
-                "fieldName": "leave"
-              },
-              {
-                "config": {
-                  "id": "equal",
-                  "options": {
-                    "value": 0
-                  }
-                },
-                "fieldName": "list"
-              },
-              {
-                "config": {
-                  "id": "equal",
-                  "options": {
-                    "value": 0
-                  }
-                },
-                "fieldName": "phrase"
-              },
-              {
-                "config": {
-                  "id": "equal",
-                  "options": {
-                    "value": 0
-                  }
-                },
-                "fieldName": "rejoin"
-              },
-              {
-                "config": {
-                  "id": "equal",
-                  "options": {
-                    "value": 0
-                  }
-                },
-                "fieldName": "reset"
-              },
-              {
-                "config": {
-                  "id": "equal",
-                  "options": {
-                    "value": 0
-                  }
-                },
-                "fieldName": "say auto delete"
-              },
-              {
-                "config": {
-                  "id": "equal",
-                  "options": {
-                    "value": 0
-                  }
-                },
-                "fieldName": "speed"
-              },
-              {
-                "config": {
-                  "id": "equal",
-                  "options": {
-                    "value": 0
-                  }
-                },
-                "fieldName": "test"
-              },
-              {
-                "config": {
-                  "id": "equal",
-                  "options": {
-                    "value": 0
-                  }
-                },
-                "fieldName": "voice"
-              },
-              {
-                "config": {
-                  "id": "equal",
-                  "options": {
-                    "value": 0
-                  }
-                },
-                "fieldName": "voices"
-              },
-              {
-                "config": {
-                  "id": "equal",
-                  "options": {
-                    "value": 0
-                  }
-                },
-                "fieldName": "flip"
-              },
-              {
-                "config": {
-                  "id": "equal",
-                  "options": {
-                    "value": 0
-                  }
-                },
-                "fieldName": "leave guild"
-              },
-              {
-                "config": {
-                  "id": "equal",
-                  "options": {
-                    "value": 0
-                  }
-                },
-                "fieldName": "restart"
-              },
-              {
-                "config": {
-                  "id": "equal",
-                  "options": {
-                    "value": 0
-                  }
-                },
-                "fieldName": "update bot lists"
-              },
-              {
-                "config": {
-                  "id": "equal",
-                  "options": {
-                    "value": 0
-                  }
-                },
-                "fieldName": "uptime"
-              }
-            ],
-            "match": "any",
-            "type": "exclude"
-          }
-        }
-      ],
+      "transformations": [],
       "type": "timeseries"
     },
     {
@@ -1884,7 +1612,7 @@
       }
     }
   ],
-  "refresh": false,
+  "refresh": "",
   "schemaVersion": 30,
   "style": "dark",
   "tags": [],
@@ -2088,5 +1816,5 @@
   "timezone": "",
   "title": "Siri Bot",
   "uid": "PTSqcpJWk",
-  "version": 1
+  "version": 2
 }
