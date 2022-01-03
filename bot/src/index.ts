@@ -11,6 +11,7 @@
  */
 import path from 'path'
 import {
+  Command,
   CommandoClient,
   CommandoGuild,
   SyncSQLiteProvider,
@@ -27,6 +28,8 @@ import { importDirectory, shutdown } from './lib/utils'
 import ensureDirectories from './scripts/directories'
 import startMetricServer from './server'
 import { Task } from './types/task'
+import commandRun from './handlers/commandRun'
+import { setupCommandCounters } from './lib/metrics'
 
 process.on('unhandledRejection', console.error)
 process.on('uncaughtException', (e) => {
@@ -106,10 +109,8 @@ async function init() {
     .registerCommandsIn(path.join(__dirname, 'commands/fun'))
     .registerCommandsIn(path.join(__dirname, 'commands/owner'))
 
-  console.log(
-    'Loaded Commands:',
-    client.registry.commands.map((command) => command.name),
-  )
+  // Setup command metric counters
+  setupCommandCounters(client.registry.commands.map((command) => command.name))
 
   client
     .on('error', console.error)
@@ -120,6 +121,7 @@ async function init() {
     )
     .on('guildCreate', (guild) => guildCreate(guild as CommandoGuild, client))
     .on('guildDelete', (guild) => guildDelete(guild as CommandoGuild, client))
+    .on('commandRun', (command) => commandRun(command as Command))
 
   if (process.env.DEBUG && process.env.DEBUG === 'true') {
     client.on('debug', (message) => {

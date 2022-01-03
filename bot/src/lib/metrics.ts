@@ -7,8 +7,14 @@
  * Summary: similar to a histogram, samples observations, it calculates configurable quantiles over a sliding time window
  */
 
-import { Registry, Gauge, collectDefaultMetrics, Metric } from 'prom-client'
+import { Registry, Gauge, collectDefaultMetrics } from 'prom-client'
+import camelCase from 'camelcase'
 
+type CommandCounterType = {
+  [key: string]: Gauge<string>
+}
+
+export const commandCounters:CommandCounterType = {}
 export const register = new Registry()
 
 collectDefaultMetrics({ register })
@@ -43,57 +49,16 @@ export const announcementsTotal = new Gauge({
   registers: [register],
 })
 
-// export default class Metrics {
-//   private static instance: Metrics
+export const setupCommandCounters = (commandNames: string[]) => {
+  commandNames.forEach(command => {
+    console.log('Creating Command Counter for', command)
+    const counter = new Gauge({
+      name: `${camelCase(command)}Total`,
+      help: `Total number of ${command} commands run`,
+      registers: [register]
+    })
 
-//   private _guildTotal: Gauge<undefined
-//   private _voiceTotal: Gauge<undefined>
-//   private _joinPhraseTotal: Gauge<undefined>
-//   private _leavePhraseTotal: Gauge<undefined>
-//   private _announcementsTotal: Gauge<undefined>
-//   private _register = new Registry()
-
-//   constructor() {}
-
-//   static getInstance() {
-//     if (!Metrics.instance) {
-//       Metrics.instance = new Metrics()
-//       collectDefaultMetrics({ register: Metrics.instance._register })
-
-//       Metrics.instance._guildTotal = new Gauge({
-//         name: 'guild_total',
-//         help: 'Total number of guilds',
-//         registers: [Metrics.instance._register],
-//       })
-
-//       Metrics.instance._voiceTotal = new Gauge({
-//         name: 'voice_total',
-//         help: 'Total number of voice connections',
-//         registers: [Metrics.instance._register],
-//       })
-
-//       Metrics.instance._joinPhraseTotal = new Gauge({
-//         name: 'join_phrase_total',
-//         help: 'Total number of join phrases added by users',
-//         registers: [Metrics.instance._register],
-//       })
-
-//       Metrics.instance._leavePhraseTotal = new Gauge({
-//         name: 'leave_phrase_total',
-//         help: 'Total number of leave phrases added by users',
-//         registers: [Metrics.instance._register],
-//       })
-
-//       Metrics.instance._announcementsTotal = new Gauge({
-//         name: 'announcement_phrase_total',
-//         help: 'Total number of announcements and phrases said',
-//         registers: [Metrics.instance._register],
-//       })
-//     }
-//     return Metrics.instance
-//   }
-
-//   get guildTotal() {
-//     return this._guildTotal
-//   }
-// }
+    // Store for use in the `updateMetrics` task
+    commandCounters[command] = counter
+  })
+}

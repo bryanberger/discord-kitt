@@ -1,8 +1,9 @@
 import { botCache } from '..'
 import { Time } from '../lib/constants'
-import { announcements, channels, guilds, join, leave } from '../lib/database'
+import { announcements, channels, commands, guilds, join, leave } from '../lib/database'
 import {
   announcementsTotal,
+  commandCounters,
   guildTotal,
   joinPhraseTotal,
   leavePhraseTotal,
@@ -19,6 +20,11 @@ botCache.tasks.set(`updateMetrics`, {
       joinPhraseTotal.set(await join.get('count'))
       leavePhraseTotal.set(await leave.get('count'))
       announcementsTotal.set(await announcements.get('count'))
+
+      // Command Counters
+      Object.entries(commandCounters).map(async ([key, value]) => {
+        value.set(await commands.get(key) || 0)
+      })
     } catch (err) {
       // value may possibly not exist yet
     }
