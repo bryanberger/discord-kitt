@@ -8,7 +8,7 @@
  */
 
 import { Registry, Gauge, collectDefaultMetrics } from 'prom-client'
-import camelCase from 'camelcase'
+import snakeCase from 'lodash.snakecase'
 
 type CommandCounterType = {
   [key: string]: Gauge<string>
@@ -53,7 +53,7 @@ export const setupCommandCounters = (commandNames: string[]) => {
   commandNames.forEach(command => {
     console.log('Creating Command Counter for', command)
     const counter = new Gauge({
-      name: `${camelCase(command)}Total`,
+      name: `${snakeCase(command)}_command_total`,
       help: `Total number of ${command} commands run`,
       registers: [register]
     })
