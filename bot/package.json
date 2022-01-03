@@ -21,6 +21,7 @@
     "aws-sdk": "^2.891.0",
     "better-sqlite3": "^7.1.5",
     "bufferutil": "^4.0.3",
+    "camelcase": "^6.3.0",
     "discord.js": "^12.5.3",
     "discord.js-commando": "github:discordjs/commando#5f951a52a161df9c23bb2e2a4c827b4cd7294bb6",
     "dotenv": "^8.2.0",
