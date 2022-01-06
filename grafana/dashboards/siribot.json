@@ -22,7 +22,7 @@
   "editable": true,
   "gnetId": 11159,
   "graphTooltip": 0,
-  "iteration": 1641230309662,
+  "iteration": 1641490250052,
   "links": [],
   "panels": [
     {
@@ -761,6 +761,107 @@
     },
     {
       "datasource": null,
+      "description": "announcement and say requests to AWS Polly per day",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "barAlignment": 0,
+            "drawStyle": "line",
+            "fillOpacity": 0,
+            "gradientMode": "none",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "lineInterpolation": "smooth",
+            "lineWidth": 2,
+            "pointSize": 10,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "showPoints": "always",
+            "spanNulls": false,
+            "stacking": {
+              "group": "A",
+              "mode": "none"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 12,
+        "w": 12,
+        "x": 0,
+        "y": 11
+      },
+      "id": 43,
+      "interval": "1d",
+      "options": {
+        "legend": {
+          "calcs": [],
+          "displayMode": "hidden",
+          "placement": "bottom"
+        },
+        "tooltip": {
+          "mode": "single"
+        }
+      },
+      "targets": [
+        {
+          "exemplar": true,
+          "expr": "delta(announcement_phrase_total[1d])",
+          "format": "time_series",
+          "instant": false,
+          "interval": "",
+          "legendFormat": "announcement total",
+          "refId": "A"
+        },
+        {
+          "exemplar": true,
+          "expr": "last_over_time(announcement_phrase_total[1d])",
+          "hide": true,
+          "interval": "",
+          "legendFormat": "",
+          "refId": "B"
+        },
+        {
+          "exemplar": true,
+          "expr": "delta(say_command_total[1d])",
+          "hide": false,
+          "interval": "",
+          "legendFormat": "say command total",
+          "refId": "C"
+        }
+      ],
+      "title": "Totals Polly requests per day",
+      "type": "timeseries"
+    },
+    {
+      "datasource": null,
       "description": "",
       "fieldConfig": {
         "defaults": {
@@ -817,8 +918,8 @@
       },
       "gridPos": {
         "h": 12,
-        "w": 24,
-        "x": 0,
+        "w": 12,
+        "x": 12,
         "y": 11
       },
       "id": 41,
@@ -1081,7 +1182,7 @@
           "refId": "AD"
         }
       ],
-      "title": "Command Totals",
+      "title": "Totals in Aggregate",
       "transformations": [],
       "type": "timeseries"
     },
@@ -1612,7 +1713,7 @@
       }
     }
   ],
-  "refresh": "",
+  "refresh": "15s",
   "schemaVersion": 30,
   "style": "dark",
   "tags": [],
@@ -1784,7 +1885,7 @@
     ]
   },
   "time": {
-    "from": "now-12h",
+    "from": "now-7d",
     "to": "now"
   },
   "timepicker": {
@@ -1816,5 +1917,5 @@
   "timezone": "",
   "title": "Siri Bot",
   "uid": "PTSqcpJWk",
-  "version": 2
+  "version": 3
 }
