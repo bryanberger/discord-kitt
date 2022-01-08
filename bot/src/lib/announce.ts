@@ -7,11 +7,17 @@ import { VoiceId } from 'aws-sdk/clients/polly'
 import { announcements } from './database'
 import { getFileByKey, putFile } from './s3'
 
+export type SayMetadataType = {
+  memberId: string
+  guildId: string
+}
+
 export const say = async (
   voiceConnection: VoiceConnection,
   text: string,
   voiceId: VoiceId,
   speed: number,
+  metadata?: SayMetadataType,
 ) => {
   if (voiceConnection) {
     try {
@@ -35,7 +41,7 @@ export const say = async (
         await play(voiceConnection, stream)
 
         // Store synth in s3
-        await putFile(key, stream)
+        await putFile(key, stream, metadata)
       }
 
       // Increment stats
