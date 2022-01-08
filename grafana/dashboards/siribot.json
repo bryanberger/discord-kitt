@@ -22,7 +22,7 @@
   "editable": true,
   "gnetId": 11159,
   "graphTooltip": 0,
-  "iteration": 1641490250052,
+  "iteration": 1641611847134,
   "links": [],
   "panels": [
     {
@@ -761,7 +761,7 @@
     },
     {
       "datasource": null,
-      "description": "announcement and say requests to AWS Polly per day",
+      "description": "Successful S3 Put/Get and Polly requests",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -833,31 +833,32 @@
       "targets": [
         {
           "exemplar": true,
-          "expr": "delta(announcement_phrase_total[1d])",
+          "expr": "delta(aws_polly_request_total[1d])",
           "format": "time_series",
+          "hide": false,
           "instant": false,
           "interval": "",
-          "legendFormat": "announcement total",
+          "legendFormat": "aws_polly_request_total",
           "refId": "A"
         },
         {
           "exemplar": true,
-          "expr": "last_over_time(announcement_phrase_total[1d])",
-          "hide": true,
+          "expr": "delta(aws_s3_get_request_total[1d])",
+          "hide": false,
           "interval": "",
-          "legendFormat": "",
-          "refId": "B"
+          "legendFormat": "aws_s3_get_request_total",
+          "refId": "C"
         },
         {
           "exemplar": true,
-          "expr": "delta(say_command_total[1d])",
+          "expr": "delta(aws_s3_put_request_total[1d])",
           "hide": false,
           "interval": "",
-          "legendFormat": "say command total",
-          "refId": "C"
+          "legendFormat": "aws_s3_put_request_total",
+          "refId": "D"
         }
       ],
-      "title": "Totals Polly requests per day",
+      "title": "AWS Request Totals By Day",
       "type": "timeseries"
     },
     {
@@ -1182,7 +1183,7 @@
           "refId": "AD"
         }
       ],
-      "title": "Totals in Aggregate",
+      "title": "Command Totals in Aggregate",
       "transformations": [],
       "type": "timeseries"
     },
@@ -1917,5 +1918,5 @@
   "timezone": "",
   "title": "Siri Bot",
   "uid": "PTSqcpJWk",
-  "version": 3
+  "version": 1
 }
