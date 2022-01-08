@@ -8,6 +8,7 @@ export const channels = new Keyv(redisUrl, { namespace: 'channels' })
 export const guilds = new Keyv(redisUrl, { namespace: 'guilds' })
 export const announcements = new Keyv(redisUrl, { namespace: 'announcements' })
 export const commands = new Keyv(redisUrl, { namespace: 'commands' })
+export const awsRequests = new Keyv(redisUrl, { namespace: 'aws' })
 
 // Handle DB connection errors
 join.on('error', (err) => console.log('DB Connection Error (join)', err))
@@ -21,6 +22,9 @@ announcements.on('error', (err) =>
 )
 commands.on('error', (err) =>
   console.log('DB Connection Error (commands)', err),
+)
+awsRequests.on('error', (err) =>
+  console.log('DB Connection Error (awsRequests)', err),
 )
 
 // Helpers for setting the guild object
