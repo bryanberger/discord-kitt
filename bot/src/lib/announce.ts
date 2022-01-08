@@ -1,9 +1,11 @@
 import { StreamOptions, VoiceBroadcast, VoiceConnection } from 'discord.js'
+import crypto from 'crypto'
 
 import { synth } from './polly'
 import { Readable } from 'stream'
 import { VoiceId } from 'aws-sdk/clients/polly'
 import { announcements } from './database'
+import { getFileByKey, putFile } from './s3'
 
 export const say = async (
   voiceConnection: VoiceConnection,
@@ -13,8 +15,30 @@ export const say = async (
 ) => {
   if (voiceConnection) {
     try {
-      const stream = await synth(text, voiceId, speed)
-      await play(voiceConnection, stream)
+      // Normalize text to lowercase
+      // Create a file key as the md5 hash of VOICEID+SPEED+TEXT
+      const keyBase = `${voiceId}-${speed}-${text}`.toLowerCase()
+      const key = crypto.createHash('sha1').update(keyBase).digest('hex') + '.mp3'
+
+      // Lookup to see if we have this phrase cached in S3
+      const existingStream = await getFileByKey(key)
+
+      // If it existingStream, play it directly
+      if (existingStream) {
+        // Play stream to VC
+        await play(voiceConnection, existingStream)
+      } else {
+        // Else get a fresh synth from Polly
+        const stream = await synth(text, voiceId, speed)
+
+        // Play stream to VC
+        await play(voiceConnection, stream)
+
+        // Store synth in s3
+        await putFile(key, stream)
+      }
+
+      // Increment stats
       const count: number = (await announcements.get('count')) || 0
       await announcements.set('count', count + 1)
     } catch (err) {

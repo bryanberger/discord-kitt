@@ -1,12 +1,14 @@
-import AWS, { AWSError } from 'aws-sdk'
 import Discord from 'discord.js'
-import { SynthesizeSpeechInput, VoiceId } from 'aws-sdk/clients/polly'
+import { AWSError } from 'aws-sdk'
+import Polly, { SynthesizeSpeechInput, VoiceId } from 'aws-sdk/clients/polly'
+
 import { PassThrough, Stream } from 'stream'
 import { DEFAULT_SPEED, DEFAULT_VOICE_ID, LEXICONS } from './constants'
 import { encodeStringForSSML } from './utils'
+import { awsRequests } from './database'
 
 // Create an Polly client
-const Polly = new AWS.Polly({
+const polly = new Polly({
   signatureVersion: 'v4',
   region: process.env.AWS_DEFAULT_REGION,
 })
@@ -37,7 +39,10 @@ export const synth = (
   }
 
   return new Promise((resolve, reject) => {
-    Polly.synthesizeSpeech(params, (err, data) => {
+    polly.synthesizeSpeech(params, async (err, data) => {
+      const count: number = (await awsRequests.get('polly')) || 0
+      await awsRequests.set('polly', count + 1)
+
       if (err) {
         console.error(err)
         reject(err)
@@ -89,5 +94,5 @@ export const loadAndCacheVoices = () => {
     console.debug('Voices and codes loaded')
   }
 
-  Polly.describeVoices({ Engine: 'standard' }, cacheVoicesAndLangCodes)
+  polly.describeVoices({ Engine: 'standard' }, cacheVoicesAndLangCodes)
 }

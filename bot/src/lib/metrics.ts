@@ -49,6 +49,24 @@ export const announcementsTotal = new Gauge({
   registers: [register],
 })
 
+export const awsS3GetRequestTotal = new Gauge({
+  name: 'aws_s3_get_request_total',
+  help: 'Total number of AWS S3 get requests',
+  registers: [register],
+})
+
+export const awsS3PutRequestTotal = new Gauge({
+  name: 'aws_s3_put_request_total',
+  help: 'Total number of AWS S3 put requests',
+  registers: [register],
+})
+
+export const awsPollyRequestTotal = new Gauge({
+  name: 'aws_polly_request_total',
+  help: 'Total number of AWS Polly put requests',
+  registers: [register],
+})
+
 export const setupCommandCounters = (commandNames: string[]) => {
   commandNames.forEach(command => {
     console.log('Creating Command Counter for', command)
