@@ -65,7 +65,10 @@ export class SayCommand extends Command {
       }
 
       // announce
-      await say(voiceConnection, args.phrase.trim(), guildVoiceId, guildSpeed)
+      await say(voiceConnection, args.phrase.trim(), guildVoiceId, guildSpeed, {
+        memberId: message.member.id,
+        guildId: message.member.guild.id,
+      });
     } catch (err) {
       console.error(err)
     }

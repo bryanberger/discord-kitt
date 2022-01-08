@@ -1,7 +1,8 @@
 // TODO: update aws sdk to v3
 import { AudioStream } from 'aws-sdk/clients/polly'
-import S3, { GetObjectRequest, PutObjectRequest } from 'aws-sdk/clients/s3'
+import S3, { GetObjectRequest, PutObjectRequest, Metadata } from 'aws-sdk/clients/s3'
 import { PassThrough, Stream } from 'stream'
+import { SayMetadataType } from './announce'
 import { awsRequests } from './database'
 
 const s3 = new S3({
@@ -11,7 +12,7 @@ const s3 = new S3({
   }
 })
 
-export const putFile = async (key: string, audioStream: AudioStream): Promise<string|null> => {
+export const putFile = async (key: string, audioStream: AudioStream, metadata?: SayMetadataType): Promise<string|null> => {
   const params: PutObjectRequest = {
     Body: audioStream, 
     Bucket: process.env.AWS_BUCKET_NAME, 
@@ -19,6 +20,9 @@ export const putFile = async (key: string, audioStream: AudioStream): Promise<st
     // Automatically moves object to different access tiers to try and save money based on access usage of the object
     StorageClass: 'INTELLIGENT_TIERING',
   }
+
+  if (metadata)
+    params.Metadata = metadata
 
   try {
     await s3.upload(params).promise()

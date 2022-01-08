@@ -49,7 +49,11 @@ export class TestCommand extends Command {
         voiceConnection,
         `Hello, I'm one of the voices you can use for this bot. When I announce a phrase, I will sound like this.`,
         guildVoiceId,
-        guildSpeed
+        guildSpeed,
+        {
+          memberId: message.member.id,
+          guildId: message.member.guild.id,
+        }
       )
     } catch (err) {
       console.error(err)

@@ -159,6 +159,10 @@ export default async (
       `${nicks ? username : ''} ${message}`,
       guildVoiceId,
       guildSpeed,
+      {
+        memberId: newState.member.id,
+        guildId: newState.guild.id,
+      }
     )
   }
 }
