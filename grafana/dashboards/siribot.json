@@ -22,7 +22,7 @@
   "editable": true,
   "gnetId": 11159,
   "graphTooltip": 0,
-  "iteration": 1641740345418,
+  "iteration": 1641740670941,
   "links": [],
   "panels": [
     {
@@ -893,6 +893,7 @@
     },
     {
       "datasource": null,
+      "description": "",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -961,27 +962,28 @@
           "placement": "bottom"
         },
         "tooltip": {
-          "mode": "single"
+          "mode": "multi"
         }
       },
       "targets": [
         {
           "exemplar": true,
-          "expr": "aws_polly_request_total > 0",
+          "expr": "delta(aws_polly_request_total[1h])",
+          "hide": false,
           "interval": "",
-          "legendFormat": "aws_polly_request_total",
-          "refId": "A"
+          "legendFormat": "Polly",
+          "refId": "C"
         },
         {
           "exemplar": true,
-          "expr": "aws_s3_get_request_total > 0",
+          "expr": "delta(aws_s3_get_request_total[1h])",
           "hide": false,
           "interval": "",
-          "legendFormat": "aws_s3_get_request_total",
-          "refId": "B"
+          "legendFormat": "Get",
+          "refId": "D"
         }
       ],
-      "title": "AWS Requests per hour",
+      "title": "AWS Requests Delta Per Hour",
       "type": "timeseries"
     },
     {
@@ -2038,5 +2040,5 @@
   "timezone": "",
   "title": "Siri Bot",
   "uid": "PTSqcpJWk",
-  "version": 2
+  "version": 1
 }
