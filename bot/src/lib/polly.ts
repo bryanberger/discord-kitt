@@ -23,7 +23,7 @@ export const synth = (
   text: string,
   voiceId?: VoiceId,
   speed?: number,
-): Promise<PassThrough> => {
+): Promise<{passthrough: PassThrough, buffer: Buffer}> => {
   const safeSsmlText = encodeStringForSSML(text)
   const ssmlText = `<speak><prosody rate="${
     speed || DEFAULT_SPEED
@@ -36,6 +36,7 @@ export const synth = (
     LexiconNames: LEXICONS,
     VoiceId: voiceId ?? DEFAULT_VOICE_ID,
     TextType: 'ssml',
+    SampleRate: '16000',
   }
 
   return new Promise((resolve, reject) => {
@@ -50,7 +51,10 @@ export const synth = (
         if (data.AudioStream instanceof Buffer) {
           const stream = new Stream.PassThrough()
           stream.end(data.AudioStream)
-          resolve(stream)
+          resolve({ 
+            passthrough: stream,
+            buffer: data.AudioStream
+          })
         }
       }
     })

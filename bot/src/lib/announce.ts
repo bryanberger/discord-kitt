@@ -35,13 +35,13 @@ export const say = async (
         await play(voiceConnection, existingStream)
       } else {
         // Else get a fresh synth from Polly
-        const stream = await synth(text, voiceId, speed)
+        const { passthrough, buffer } = await synth(text, voiceId, speed)
 
         // Play stream to VC
-        await play(voiceConnection, stream)
+        await play(voiceConnection, passthrough)
 
         // Store synth in s3
-        await putFile(key, stream, metadata)
+        await putFile(key, buffer, metadata)
       }
 
       // Increment stats

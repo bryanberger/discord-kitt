@@ -1,7 +1,8 @@
 // TODO: update aws sdk to v3
-import { AudioStream } from 'aws-sdk/clients/polly'
 import S3, { GetObjectRequest, PutObjectRequest, Metadata } from 'aws-sdk/clients/s3'
 import { PassThrough, Stream } from 'stream'
+import lz4 from 'lz4'
+
 import { SayMetadataType } from './announce'
 import { awsRequests } from './database'
 
@@ -12,9 +13,12 @@ const s3 = new S3({
   }
 })
 
-export const putFile = async (key: string, audioStream: AudioStream, metadata?: SayMetadataType): Promise<string|null> => {
+export const putFile = async (key: string, audioStream: Buffer, metadata?: SayMetadataType): Promise<string|null> => {
+  // LZ4 compress
+  const compressedAudioStream = lz4.encode(audioStream, { highCompression: true })
+
   const params: PutObjectRequest = {
-    Body: audioStream, 
+    Body: compressedAudioStream, 
     Bucket: process.env.AWS_BUCKET_NAME, 
     Key: key,
     // Automatically moves object to different access tiers to try and save money based on access usage of the object
@@ -43,14 +47,16 @@ export const getFileByKey = async (key: string): Promise<PassThrough|null> => {
   }
 
   try {
-    const body = (await (s3.getObject(params).promise())).Body
+    const body = (await (s3.getObject(params).promise())).Body as Buffer
 
     if(body) {
       const count: number = (await awsRequests.get('s3get')) || 0
       await awsRequests.set('s3get', count + 1)
 
+      // LZ4 decompress
+      const decompressedAudioStream = lz4.decode(body)
       const stream = new Stream.PassThrough()
-      stream.end(body)
+      stream.end(decompressedAudioStream)
       return stream
     } else {
       return null
