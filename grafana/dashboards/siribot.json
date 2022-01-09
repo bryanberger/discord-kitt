@@ -22,7 +22,7 @@
   "editable": true,
   "gnetId": 11159,
   "graphTooltip": 0,
-  "iteration": 1641613327809,
+  "iteration": 1641740345418,
   "links": [],
   "panels": [
     {
@@ -810,11 +810,37 @@
             ]
           }
         },
-        "overrides": []
+        "overrides": [
+          {
+            "__systemRef": "hideSeriesFrom",
+            "matcher": {
+              "id": "byNames",
+              "options": {
+                "mode": "exclude",
+                "names": [
+                  "aws_polly_request_total",
+                  "aws_s3_get_request_total"
+                ],
+                "prefix": "All except:",
+                "readOnly": true
+              }
+            },
+            "properties": [
+              {
+                "id": "custom.hideFrom",
+                "value": {
+                  "legend": false,
+                  "tooltip": false,
+                  "viz": true
+                }
+              }
+            ]
+          }
+        ]
       },
       "gridPos": {
         "h": 12,
-        "w": 12,
+        "w": 8,
         "x": 0,
         "y": 11
       },
@@ -863,6 +889,99 @@
         }
       ],
       "title": "AWS Request Totals By Day",
+      "type": "timeseries"
+    },
+    {
+      "datasource": null,
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "barAlignment": 0,
+            "drawStyle": "line",
+            "fillOpacity": 10,
+            "gradientMode": "none",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "lineInterpolation": "linear",
+            "lineWidth": 1,
+            "pointSize": 5,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "showPoints": "never",
+            "spanNulls": true,
+            "stacking": {
+              "group": "A",
+              "mode": "none"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 12,
+        "w": 8,
+        "x": 8,
+        "y": 11
+      },
+      "id": 45,
+      "interval": "1h",
+      "options": {
+        "legend": {
+          "calcs": [
+            "mean",
+            "lastNotNull"
+          ],
+          "displayMode": "table",
+          "placement": "bottom"
+        },
+        "tooltip": {
+          "mode": "single"
+        }
+      },
+      "targets": [
+        {
+          "exemplar": true,
+          "expr": "aws_polly_request_total > 0",
+          "interval": "",
+          "legendFormat": "aws_polly_request_total",
+          "refId": "A"
+        },
+        {
+          "exemplar": true,
+          "expr": "aws_s3_get_request_total > 0",
+          "hide": false,
+          "interval": "",
+          "legendFormat": "aws_s3_get_request_total",
+          "refId": "B"
+        }
+      ],
+      "title": "AWS Requests per hour",
       "type": "timeseries"
     },
     {
@@ -923,8 +1042,8 @@
       },
       "gridPos": {
         "h": 12,
-        "w": 12,
-        "x": 12,
+        "w": 8,
+        "x": 16,
         "y": 11
       },
       "id": 41,
@@ -1887,7 +2006,7 @@
     ]
   },
   "time": {
-    "from": "now-12h",
+    "from": "now-2d",
     "to": "now"
   },
   "timepicker": {
@@ -1919,5 +2038,5 @@
   "timezone": "",
   "title": "Siri Bot",
   "uid": "PTSqcpJWk",
-  "version": 1
+  "version": 2
 }
