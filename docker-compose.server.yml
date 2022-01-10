@@ -2,7 +2,7 @@ version: '3'
 
 services:
   redis:
-    image: redis:latest
+    image: redis:6.2.6
     container_name: "siribot-cache"
     command: bash -c "redis-server --appendonly yes"
     restart: always
@@ -12,7 +12,7 @@ services:
       - ./cache:/data
 
   prometheus:
-    image: prom/prometheus
+    image: prom/prometheus:v2.29.2
     container_name: prometheus
     restart: always
     command: --config.file=/etc/prometheus/prometheus.yml --storage.tsdb.path=/prometheus --storage.tsdb.retention=1y
@@ -23,13 +23,17 @@ services:
       - prometheus_data:/prometheus
 
   grafana:
-    image: grafana/grafana
+    image: grafana/grafana:8.3.3
     ports:
       - 3000:3000
     depends_on:
       - prometheus
     environment:
       GF_SECURITY_ADMIN_PASSWORD: ${GF_SECURITY_ADMIN_PASSWORD}
+      AWS_ACCESS_KEY_ID: ${AWS_ACCESS_KEY_ID}
+      AWS_SECRET_ACCESS_KEY: ${AWS_SECRET_ACCESS_KEY}
+      AWS_DEFAULT_REGION: ${AWS_DEFAULT_REGION}
+      AWS_REGION: ${AWS_DEFAULT_REGION}
     volumes:
       - grafana_data:/var/lib/grafana
       - ./grafana/provisioning:/etc/grafana/provisioning
@@ -38,7 +42,7 @@ services:
 
   siribot:
     container_name: "siribot"
-    image: smartdockerrepo.azurecr.io/deca/siribot:latest
+    image: bbergerdocker/discord-kitt:1.0.13
     restart: unless-stopped
     depends_on:
       - redis
@@ -46,19 +50,8 @@ services:
       - 3001
     volumes:
       - ./settings:/usr/src/app/settings
-    environment:
-      DISCORD_TOKEN: ${DISCORD_TOKEN}
-      OWNER_ID: ${OWNER_ID}
-      BOT_ID: ${BOT_ID}
-      AWS_ACCESS_KEY_ID: ${AWS_ACCESS_KEY_ID}
-      AWS_SECRET_ACCESS_KEY: ${AWS_SECRET_ACCESS_KEY}
-      AWS_DEFAULT_REGION: ${AWS_DEFAULT_REGION}
-      REDIS_URL: ${REDIS_URL}
-      NODE_ENV: production
-      DEBUG: true
-      TOP_GG: ${TOP_GG}
-      DISCORD_BOTS_GG: ${DISCORD_BOTS_GG}
-      DISCORD_BOT_LIST: ${DISCORD_BOT_LIST}
+    env_file:
+      - .env
 
 volumes:
   prometheus_data:

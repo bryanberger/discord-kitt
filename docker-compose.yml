@@ -31,6 +31,10 @@ services:
       - prometheus
     environment:
       GF_SECURITY_ADMIN_PASSWORD: ${GF_SECURITY_ADMIN_PASSWORD}
+      AWS_ACCESS_KEY_ID: ${AWS_ACCESS_KEY_ID}
+      AWS_SECRET_ACCESS_KEY: ${AWS_SECRET_ACCESS_KEY}
+      AWS_DEFAULT_REGION: ${AWS_DEFAULT_REGION}
+      AWS_REGION: ${AWS_DEFAULT_REGION}
     volumes:
       - grafana_data:/var/lib/grafana
       - ./grafana/provisioning:/etc/grafana/provisioning
@@ -43,7 +47,7 @@ services:
       args:
         REDIS_URL: ${REDIS_URL}
         NODE_ENV: ${NODE_ENV}
-    command: npm run start:dev
+    command: npm run start
     depends_on:
       - redis
       - prometheus

@@ -7,3 +7,9 @@ datasources:
     is_default: true
     version: 1
     editable: true
+  - name: CloudWatch
+    type: cloudwatch
+    jsonData:
+      authType: default
+      defaultRegion: us-east-1
+    editable: true
