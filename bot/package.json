@@ -21,7 +21,7 @@
     "aws-sdk": "^2.891.0",
     "better-sqlite3": "^7.1.5",
     "bufferutil": "^4.0.3",
-    "discord.js": "git+https://github.com/bryanberger/discord.js.git#fix/cache-undefined",
+    "discord.js": "github:bryanberger/discord.js#dadd0fc70b9a9cec2d3d6c82a0933056e0884de9",
     "discord.js-commando": "github:discordjs/commando#5f951a52a161df9c23bb2e2a4c827b4cd7294bb6",
     "dotenv": "^8.2.0",
     "emoji-regex": "^9.2.2",
